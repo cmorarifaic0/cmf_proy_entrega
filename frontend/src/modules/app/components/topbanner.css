@@ -1,0 +1,30 @@
+.banner {
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    position: sticky;
+    top: 56px; 
+    z-index: 1030; 
+    width: 100%;
+}
+
+
+.banner-text {
+ --webkit-animation: scrolling-left1 20s linear infinite;
+    animation: scrolling-left1 20s linear infinite;
+    position:relative;
+    display: inline-block;
+}
+
+
+@keyframes scrolling-left1 {
+    0% {
+        transform: translateX(100%);
+        -webkit-transform: translateX(100%);
+    }
+
+    100% {
+        transform: translateX(-100%);
+        -webkit-transform: translateX(-100%);
+    }
+}
