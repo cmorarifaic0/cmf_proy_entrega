@@ -79,6 +79,22 @@ CREATE TABLE IF NOT EXISTS OrderItem (
     CONSTRAINT OrderItemOrderIdFK FOREIGN KEY(orderId)
         REFERENCES OrderTable (id)
 );
+CREATE TABLE IF NOT EXISTS CheckoutProcess (
+    id BIGSERIAL PRIMARY KEY,
+    orderId BIGINT NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    paymentId BIGINT NOT NULL,
+    FOREIGN KEY (orderId) REFERENCES OrderTable (id),
+    FOREIGN KEY (paymentId) REFERENCES Payment (id)
+);
+CREATE TABLE IF NOT EXISTS Payment (
+    id BIGSERIAL PRIMARY KEY,
+    amount DECIMAL(11, 2) NOT NULL,
+    date TIMESTAMP NOT NULL,
+    method VARCHAR(50) NOT NULL,
+    status VARCHAR(50) NOT NULL
+);
+
 -- Active: 1718097121195@@127.0.0.1@5432
 -- ----------------------------------------------------------------------------
 -- Put here INSERT statements for inserting data required by the application

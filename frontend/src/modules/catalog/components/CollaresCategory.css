@@ -1,0 +1,10 @@
+.banadir{
+    color:rgb(0, 0, 0);
+    background-color: #FEB1C4;
+    border:none;
+}
+.banadir:hover{
+    color: black;
+    background-color: #f07e9b;
+    border: #f07e9b;
+}

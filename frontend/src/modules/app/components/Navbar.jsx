@@ -1,18 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import SearchAndCategory from './SearchAndCategory';
-import CategorySelector from '../../catalog/components/CategorySelector';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../users/authActions';
 import './Navbar.css';
+
 const Navbar = () => {
-    const [selectedCategory, setSelectedCategory] = useState(null);
-    const options = ['Option 1', 'Option 2', 'Option 3']; // Example options
-    const categories = ['Collares', 'Pulseras', 'Pendientes', 'Anillos']; // Example categories
+    const dispatch = useDispatch();
+    const { token } = useSelector(state => state.auth);
 
-    const handleCategorySelect = (category) => {
-        setSelectedCategory(category);
-        console.log(`Selected category: ${category}`);
-
+    const handleLogout = () => {
+        dispatch(logout());
     };
 
     return (
@@ -25,29 +22,37 @@ const Navbar = () => {
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item">
-                            <Link className="nav-link" to="/">
-                                <FontAwesomeIcon icon="home" /> Home
-                            </Link>
+                            <Link className="nav-link" to="/">Home</Link>
                         </li>
                         <li className="nav-item dropdown">
                             <a className="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <FontAwesomeIcon icon="list-alt" /> Catálogo
+                                Catálogo
                             </a>
-                            <CategorySelector categories={categories} onSelectCategory={handleCategorySelect} />
+                            <ul className="dropdown-menu" aria-labelledby="categoryDropdown">
+                                <li><Link className="dropdown-item" to="/catalog/collares">Collares</Link></li>
+                                <li><Link className="dropdown-item" to="/catalog/pulseras">Pulseras</Link></li>
+                                <li><Link className="dropdown-item" to="/catalog/pendientes">Pendientes</Link></li>
+                                <li><Link className="dropdown-item" to="/catalog/anillos">Anillos</Link></li>
+                            </ul>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/shopping-cart">
-                                <FontAwesomeIcon icon="shopping-cart" /> Carrito
-                            </Link>
+                            <Link className="nav-link" to="/shopping-cart">Carrito</Link>
+                        </li>
+                        <li className="nav-item">
+                            {token ? (
+                                <button className="nav-link btn btn-link" onClick={handleLogout}>Logout</button>
+                            ) : (
+                                <Link className="nav-link" to="/login">Login</Link>
+                            )}
                         </li>
                     </ul>
-                    <SearchAndCategory options={options} categories={categories} />
+                    <form className="d-flex">
+                        <input className="form-control me-2" type="search" placeholder="Buscar" aria-label="Search" />
+                        <button className="btn bbuscar" type="submit">Buscar</button>
+                    </form>
                 </div>
             </div>
-            
         </nav>
-        
-
     );
 };
 

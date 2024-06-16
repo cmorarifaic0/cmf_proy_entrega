@@ -65,18 +65,11 @@ export const getProducts = createSelector(
     catalog => catalog.products
 );
 
-export const getNewlyAddedProducts = createSelector(
-    [getCatalogState],
-    catalog => catalog.newlyAddedProducts || []
-);
 
 // Shopping State Selectors
 const getShoppingState = state => state.shopping;
 
-export const getShoppingCart = createSelector(
-    [getShoppingState],
-    shopping => shopping.shoppingCart
-);
+export const getShoppingCart = (state) => state.shoppingCart || { items: [] };
 
 export const getLastOrderId = createSelector(
     [getShoppingState],
@@ -99,3 +92,5 @@ export const getProductsByCategory = createSelector(
     [getProducts, (state, categoryName) => categoryName],
     (products, categoryName) => products.filter(product => product.category === categoryName)
 );
+
+export const getNewlyAddedProducts = (state) => state.catalog.newlyAddedProducts;

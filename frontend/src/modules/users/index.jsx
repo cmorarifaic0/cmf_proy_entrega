@@ -1,4 +1,4 @@
-import * as actions from './actions';
+import * as actions from './authActions';
 import * as actionTypes from './actionTypes';
 import usersReducer from './reducer';
 

@@ -2,7 +2,8 @@ import * as actions from './actions';
 import * as selectors from './../../store/selectors';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import appReducer from './reducer';
-import Catalog from './components/Catalog';
+
+export {default as Home} from "./components/Home";
 
 export {default as Catalog} from "./components/Catalog";
 

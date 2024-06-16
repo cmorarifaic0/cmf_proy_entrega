@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Size;
 @Table(name = "UserTable")
 public class User {
 
-    public enum RoleType { USER }
+    public enum RoleType { USER, ADMIN, GUEST };
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,39 +17,46 @@ public class User {
 
     @NotEmpty
     @Size(min = 4, max = 20)
+    @Column(name = "username", unique = true, nullable = false)
     private String userName;
 
     @NotEmpty
     @Size(min = 8)
+    @Column(name = "password", nullable = false)
     private String password;
 
     @NotEmpty
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
     @NotEmpty
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
     @NotEmpty
     @Email
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
     private RoleType role;
 
-    @OneToOne(mappedBy = "user", optional = false, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user", optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private ShoppingCart shoppingCart;
 
     public User() {}
 
-    public User(String userName, String password, String firstName, String lastName, String email) {
+    public User(String userName, String password, String firstName, String lastName, String email, RoleType role) {
         this.userName = userName;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.role = RoleType.USER;
+        this.role = role;
     }
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }

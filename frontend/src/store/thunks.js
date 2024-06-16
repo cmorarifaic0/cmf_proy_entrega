@@ -2,7 +2,7 @@ import {
     loginRequest, loginSuccess, loginFailure, logout,
     signupRequest, signupSuccess, signupFailure,
     fetchUserProfileRequest, fetchUserProfileSuccess, fetchUserProfileFailure
-} from '../modules/users/actions';
+} from '../modules/users/authActions';
 import { 
     fetchCategoriesRequest, fetchCategoriesSuccess, fetchCategoriesFailure,
     fetchProductsRequest, fetchProductsSuccess, fetchProductsFailure,
@@ -12,9 +12,9 @@ import {
 import { 
     addToCartRequest, addToCartSuccess, addToCartFailure,
     updateCartItemRequest, updateCartItemSuccess, updateCartItemFailure,
-    removeCartItemRequest, removeCartItemSuccess, removeCartItemFailure,
+    removeFromCartRequest, removeFromCartSuccess, removeFromCartFailure,
     buyRequest, buySuccess, buyFailure
-} from '../modules/shopping/actions';
+} from '../modules/shopping/cartActions';
 import backend from '../backend';
 
 // User thunks
@@ -39,7 +39,6 @@ export const fetchUserProfile = (userId) => async (dispatch) => {
     }
 };
 
-
 export const fetchCategories = () => async (dispatch) => {
     dispatch(fetchCategoriesRequest());
     try {
@@ -60,24 +59,23 @@ export const fetchProducts = () => async (dispatch) => {
     }
 };
 
-export const fetchNewlyAddedProducts = () => async (dispatch) => {
-    dispatch(fetchNewlyAddedProductsRequest());
+export const fetchProductById = (id) => async (dispatch) => {
+    dispatch(fetchProductByIdRequest());
     try {
-        const response = await backend.catalogService.getNewlyAddedProducts();
-        dispatch(fetchNewlyAddedProductsSuccess(response.data));
+        const response = await backend.catalogService.getProductById(id);
+        dispatch(fetchProductByIdSuccess(response.data));
     } catch (error) {
-        dispatch(fetchNewlyAddedProductsFailure(error.message));
+        dispatch(fetchProductByIdFailure(error.message));
     }
 };
 
-export const fetchProductById = (id) => async (dispatch) => {
-    dispatch({ type: actionTypes.FETCH_PRODUCT_REQUEST });
+export const fetchProductsByCategory = (categoryName) => async (dispatch) => {
+    dispatch(fetchProductsRequest());
     try {
-        const response = await fetch(`/api/products/${id}`); 
-        const data = await response.json();
-        dispatch({ type: actionTypes.FETCH_PRODUCT_SUCCESS, payload: data });
+        const response = await backend.catalogService.getProductsByCategory(categoryName);
+        dispatch(fetchProductsSuccess(response.data));
     } catch (error) {
-        dispatch({ type: actionTypes.FETCH_PRODUCT_FAILURE, payload: error.message });
+        dispatch(fetchProductsFailure(error.message));
     }
 };
 
@@ -103,14 +101,14 @@ export const updateCartItemQuantity = (userId, shoppingCartId, productId, quanti
     }
 };
 
-export const removeCartItem = (userId, shoppingCartId, productId) => async (dispatch) => {
-    dispatch(removeCartItemRequest());
+export const removeFromCart = (userId, shoppingCartId, productId) => async (dispatch) => {
+    dispatch(removeFromCartRequest());
     try {
         const params = { productId };
         const response = await backend.shoppingService.removeCartItem(userId, shoppingCartId, params);
-        dispatch(removeCartItemSuccess(response.data));
+        dispatch(removeFromCartSuccess(response.data));
     } catch (error) {
-        dispatch(removeCartItemFailure(error.message));
+        dispatch(removeFromCartFailure(error.message));
     }
 };
 
@@ -124,33 +122,13 @@ export const buy = (userId, shoppingCartId, postalAddress, postalCode) => async 
         dispatch(buyFailure(error.message));
     }
 };
-export const fetchProductsByCategory = (categoryName) => async (dispatch) => {
-    dispatch({ type: actionTypes.FETCH_PRODUCTS_REQUEST });
-    try {
-        const response = await fetch(`/api/products?category=${categoryName}`); 
-        const data = await response.json();
-        dispatch({ type: actionTypes.FETCH_PRODUCTS_SUCCESS, payload: data });
-    } catch (error) {
-        dispatch({ type: actionTypes.FETCH_PRODUCTS_FAILURE, payload: error.message });
-    }
-};
 
-export const loginUser = ({ email, password }) => async (dispatch) => {
-    dispatch(loginRequest());
+export const fetchNewlyAddedProducts = () => async (dispatch) => {
+    dispatch(fetchNewlyAddedProductsRequest());
     try {
-        const response = await fetch('/api/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password }),
-        });
-        if (!response.ok) {
-            throw new Error('Login failed');
-        }
-        const data = await response.json();
-        dispatch(loginSuccess(data));
+        const response = await backend.catalogService.getNewlyAddedProducts();
+        dispatch(fetchNewlyAddedProductsSuccess(response.data));
     } catch (error) {
-        dispatch(loginFailure(error.message));
+        dispatch(fetchNewlyAddedProductsFailure(error.message));
     }
 };

@@ -1,8 +1,11 @@
 import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchProductsByCategory } from '../../../store/thunks';
-import { Container, Row, Col, Card } from 'react-bootstrap';
-//import './PulserasCategory.css';
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import Swal from 'sweetalert2';
+import './CollaresCategory.css';
 
 const PulserasCategory = () => {
     const dispatch = useDispatch();
@@ -12,25 +15,38 @@ const PulserasCategory = () => {
         dispatch(fetchProductsByCategory('Pulseras'));
     }, [dispatch]);
 
+    const addToCart = (productName) => {
+        Swal.fire({
+            icon: 'success',
+            title: 'Añadido a la cesta',
+            text: `${productName} ha sido añadido a tu cesta.`,
+            showConfirmButton: false,
+            timer: 1500
+        });
+    };
+
     return (
-        <Container className="mt-5">
-            <h1 className="text-center mb-4">Pulseras</h1>
-            {loading && <p>Loading...</p>}
-            {error && <p>{error}</p>}
-            <Row>
-                {products.map(product => (
-                    <Col key={product.id} sm={12} md={6} lg={4} className="mb-4">
-                        <Card>
-                            <Card.Img variant="top" src={product.imageUrl} />
-                            <Card.Body>
-                                <Card.Title>{product.name}</Card.Title>
-                                <Card.Text>{product.description}</Card.Text>
-                                <Card.Text>${product.price}</Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                ))}
-            </Row>
+        <Container className='cnt'>
+            <h1>Pulseras</h1>
+            <Container>
+                <Row className="my-5">
+                    {products && products.map(product => (
+                        <Col key={product.id} md={4} className="mb-4">
+                            <Card className="h-100 p-0">
+                                <img src={product.imageURL} className="card-img-top img-fluid  h-100 p-0" alt={product.name} />
+                                <Card.Body className="card-body">
+                                    <p className="card-text">{product.name}</p>
+                                </Card.Body>
+                                <Card.Footer className="text-center">
+                                    <Button className="btn bPulsera" onClick={() => addToCart(product.name)}>
+                                        Añadir a la cesta <FontAwesomeIcon icon={faShoppingCart} />
+                                    </Button>
+                                </Card.Footer>
+                            </Card>
+                        </Col>
+                    ))}
+                </Row>
+            </Container>
         </Container>
     );
 };

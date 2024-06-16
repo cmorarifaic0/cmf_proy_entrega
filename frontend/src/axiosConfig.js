@@ -10,7 +10,6 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
     config => {
-
         const token = localStorage.getItem('token');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
@@ -28,6 +27,7 @@ apiClient.interceptors.response.use(
     },
     error => {
         if (error.response.status === 401) {
+            // Handle unauthorized errors (e.g., redirect to login page)
         }
         return Promise.reject(error);
     }

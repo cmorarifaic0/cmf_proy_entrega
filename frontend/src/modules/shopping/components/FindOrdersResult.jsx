@@ -23,7 +23,7 @@ const FindOrdersResult = () => {
     if (!orderSearch || orderSearch.result.items.length === 0) {
         return (
             <div className="alert alert-info" role="alert">
-                No orders found. {/* Direct string usage */}
+                No orders found. 
             </div>
         );
     }

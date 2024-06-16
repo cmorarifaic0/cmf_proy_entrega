@@ -7,8 +7,7 @@ const Product = ({ name, description, price, imageUrl }) => (
             <div className="card-body">
                 <h5 className="card-title">{name}</h5>
                 <p className="card-text">{description}</p>
-                <p className="card-text">${price}</p>
-                <a href="#" className="btn btn-primary">Add to Cart</a>
+                <p className="card-text">{price}€</p>
             </div>
         </div>
     </div>

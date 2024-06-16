@@ -1,13 +1,12 @@
 import React from 'react';
 import { Container } from 'react-bootstrap';
-import './topbanner.css'
+import './topbanner.css';
+
 const TopBanner = () => {
     return (
-        <div className="banner text-center my-0">
+        <div className="topbanner">
             <Container>
-                <div className="banner-text">
-                    <p>Envíos gratis a partir de 150€</p>
-                </div>
+                    <p className="texto">Envíos gratis a partir de 150€</p>
             </Container>
         </div>
     );

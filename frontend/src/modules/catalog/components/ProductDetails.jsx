@@ -5,7 +5,6 @@ import { fetchProductById } from '../actions';
 import { getProduct } from '../../../store/selectors';
 import { Container, Row, Col, Card, Spinner, Alert } from 'react-bootstrap';
 
-import AddToShoppingCart from './AddToShoppingCart';
 
 const ProductDetails = () => {
     const { id } = useParams();
@@ -37,7 +36,6 @@ const ProductDetails = () => {
                             <h1>{product.name}</h1>
                             <p>{product.description}</p>
                             <h3>${product.price}</h3>
-                            <AddToShoppingCart productId={product.id} />
                         </Col>
                     </Row>
                 )}

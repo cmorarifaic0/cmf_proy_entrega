@@ -1,0 +1,13 @@
+.footr{
+    background-color:#ffcdd9;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    text-align: center;
+    font-size: 15px;
+}
+.footr a{
+margin-top:10px;
+    margin-bottom:10px;
+    text-decoration: none;
+    color: black;
+}

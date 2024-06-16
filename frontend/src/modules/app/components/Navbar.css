@@ -1,3 +1,55 @@
-.navbar{
-    position:fixed;
+.navbar {
+    padding: 0.5rem 1rem;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    margin-right: 2rem;
+}
+
+.navbar-nav {
+    display: flex;
+    align-items: center;
+}
+
+.nav-item {
+    margin-right: 1rem;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+}
+
+.form-control {
+    width: 200px;
+    border-radius: 5px;
+    padding: 0.5rem;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    outline:black;
+}
+
+.dropdown-menu {
+    left: auto;
+    right: 0;
+    z-index:3;
+}
+
+@media (max-width: 992px) {
+    .navbar-collapse {
+        justify-content: flex-start;
+    }
+    .search-container {
+        margin-top: 10px;
+        width: 100%;
+    }
+}
+.bbuscar{
+    border-color:#FA6E90;
+    outline-color:#FA6E90;
 }

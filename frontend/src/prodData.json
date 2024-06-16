@@ -1,0 +1,484 @@
+[
+    {
+        "id": 1,
+        "name": "Collar Elegancia",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 29.99,
+        "categoryId": 1,
+        "imageURL": "/src/assets/img/banner_1.jpg"
+    },
+    {
+        "id": 2,
+        "name": "Collar Perla Blanca",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 49.99,
+        "categoryId": 1,
+        "imageURL": "/src/assets/img/banner_2.jpg"
+    },
+    {
+        "id": 3,
+        "name": "Collar Corazón",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 19.99,
+        "categoryId": 1,
+        "imageURL": "/src/assets/img/banner_3.jpg"
+    },
+    {
+        "id": 4,
+        "name": "Collar Estrella",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 24.99,
+        "categoryId": 1,
+        "imageURL": "/src/assets/img/banner_4.jpg"
+    },
+    {
+        "id": 5,
+        "name": "Collar Vintage",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 34.99,
+        "categoryId": 1,
+        "imageURL": "/src/assets/img/banner_5.jpg"
+    },
+    {
+        "id": 6,
+        "name": "Pulsera Clásica",
+        "description": "Pulsera de cuentas de cristal checo",
+        "price": 14.99,
+        "categoryId": 2,
+        "imageURL": "/src/assets/img/pulsera_1.png"
+    },
+    {
+        "id": 7,
+        "name": "Pulsera Oro",
+        "description": "Pulsera de cuentas de cristal checo",
+        "price": 79.99,
+        "categoryId": 2,
+        "imageURL": "/src/assets/img/pulsera_2.png"
+
+    },
+    {
+        "id": 8,
+        "name": "Pulsera Plata",
+        "description": "Pulsera de cuentas de cristal checo",
+        "price": 59.99,
+        "categoryId": 2,
+        "imageURL": "/src/assets/img/pulsera_3.png"
+    },
+    {
+        "id": 9,
+        "name": "Pulsera Aventura",
+        "description": "Pulsera de cuentas de cristal checo",
+        "price": 19.99,
+        "categoryId": 2,
+        "imageURL": "/src/assets/img/pulsera_3.png"
+    },
+    {
+        "id": 10,
+        "name": "Pulsera Minimalista",
+        "description": "Pulsera de cuentas de cristal checo",
+        "price": 24.99,
+        "categoryId": 2,
+        "imageURL": "/src/assets/img/pulsera_4.png"
+    },
+    {
+        "id": 11,
+        "name": "Anillo Diamante",
+        "description": "Anillo de cuentas de cristal checo",
+        "price": 499.99,
+        "categoryId": 3,
+        "imageURL": "/src/assets/img/anillo_1.png"
+    },
+    {
+        "id": 12,
+        "name": "Anillo Esmeralda",
+        "description": "Anillo de cuentas de cristal checo",
+        "price": 299.99,
+        "categoryId": 3,
+        "imageURL": "/src/assets/img/anillo_2.png"
+    },
+    {
+        "id": 13,
+        "name": "Anillo Rubí",
+        "description": "Anillo de cuentas de cristal checo",
+        "price": 199.99,
+        "categoryId": 3,
+        "imageURL": "/src/assets/img/anillo_3.png"
+    },
+    {
+        "id": 14,
+        "name": "Anillo Zafiro",
+        "description": "Anillo de cuentas de cristal checo",
+        "price": 249.99,
+        "categoryId": 3,
+        "imageURL": "/src/assets/img/anillo_4.png"
+    },
+    {
+        "id": 15,
+        "name": "Anillo Clásico",
+        "description": "Anillo de cuentas de cristal checo",
+        "price": 99.99,
+        "categoryId": 3,
+        "imageURL": "/src/assets/img/anillo_5.png"
+    },
+    {
+        "id": 16,
+        "name": "Pendientes Elegancia",
+        "description": "Pendientes de cuentas de cristal checo",
+        "price": 39.99,
+        "categoryId": 4,
+        "imageURL": "/src/assets/img/pendientes_1.png"
+    },
+    {
+        "id": 17,
+        "name": "Pendientes Perla",
+        "description": "Pendientes de cuentas de cristal checo",
+        "price": 59.99,
+        "categoryId": 4,
+        "imageURL": "/src/assets/img/pendientes_2.png"
+    },
+    {
+        "id": 18,
+        "name": "Pendientes Diamante",
+        "description": "Pendientes de cuentas de cristal checo",
+        "price": 99.99,
+        "categoryId": 4,
+        "imageURL": "/src/assets/img/pendientes_3.png"
+    },
+    {
+        "id": 19,
+        "name": "Pendientes Corazón",
+        "description": "Pendientes de cuentas de cristal checo",
+        "price": 29.99,
+        "categoryId": 4,
+        "imageURL": "/src/assets/img/pendientes_4.png"
+    },
+    {
+        "id": 20,
+        "name": "Pendientes Estrella",
+        "description": "Pendientes de cuentas de cristal checo",
+        "price": 34.99,
+        "categoryId": 4,
+        "imageURL": "/src/assets/img/pendientes_5.png"
+    },
+    {
+        "id": 21,
+        "name": "Collar Mariposa",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 27.99,
+        "categoryId": 1,
+        "imageURL": "/src/assets/img/banner_6.jpg"
+    },
+    {
+        "id": 22,
+        "name": "Collar Luna",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 22.99,
+        "categoryId": 1,
+        "imageURL": "/src/assets/img/banner_7.jpg"
+        
+    },
+    {
+        "id": 23,
+        "name": "Collar Sol",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 18.99,
+        "categoryId": 1,
+        "imageURL": "/src/assets/img/banner_8.jpg"
+    },
+    {
+        "id": 24,
+        "name": "Collar Flor",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 26.99,
+        "categoryId": 1,
+        "imageURL": "/src/assets/img/banner_9.jpg"
+    },
+    {
+        "id": 25,
+        "name": "Collar Amor",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 32.99,
+        "categoryId": 1,
+        "imageURL": "/src/assets/img/banner_10.jpg"
+    },
+    {
+        "id": 26,
+        "name": "Pulsera Corazón",
+        "description": "Pulsera de cuentas de cristal checo",
+        "price": 21.99,
+        "categoryId": 2,
+        "imageURL": "/src/assets/img/pulsera_6.png"
+    },
+    {
+        "id": 27,
+        "name": "Pulsera Luna",
+        "description": "Pulsera de cuentas de cristal checo",
+        "price": 17.99,
+        "categoryId": 2,
+        "imageURL": "/src/assets/img/pulsera_7.png"
+    },
+    {
+        "id": 28,
+        "name": "Pulsera Mariposa",
+        "description": "Pulsera de cuentas de cristal checo",
+        "price": 15.99,
+        "categoryId": 2,
+        "imageURL": "/src/assets/img/pulsera_8.png"
+    },
+    {
+        "id": 29,
+        "name": "Pulsera Sol",
+        "description": "Pulsera de cuentas de cristal checo",
+        "price": 13.99,
+        "categoryId": 2,
+        "imageURL": "/src/assets/img/pulsera_9.png"
+    },
+    {
+        "id": 30,
+        "name": "Pulsera Flor",
+        "description": "Pulsera de cuentas de cristal checo",
+        "price": 19.99,
+        "categoryId": 2,
+        "imageURL": "/src/assets/img/pulsera_10.png"
+    },
+    {
+        "id": 31,
+        "name": "Anillo Mariposa",
+        "description": "Anillo de cuentas de cristal checo",
+        "price": 69.99,
+        "categoryId": 3,
+        "imageURL": "/src/assets/img/anillo_6.png"
+    },
+    {
+        "id": 32,
+        "name": "Anillo Corazón",
+        "description": "Anillo de cuentas de cristal checo",
+        "price": 89.99,
+        "categoryId": 3,
+        "imageURL": "/src/assets/img/anillo_7.png"
+    },
+    {
+        "id": 33,
+        "name": "Anillo Estrella",
+        "description": "Anillo de cuentas de cristal checo",
+        "price": 79.99,
+        "categoryId": 3,
+        "imageURL": "/src/assets/img/anillo_8.png"
+    },
+    {
+        "id": 34,
+        "name": "Anillo Flor",
+        "description": "Anillo de cuentas de cristal checo",
+        "price": 59.99,
+        "categoryId": 3,
+        "imageURL": "/src/assets/img/anillo_9.png"
+    },
+    {
+        "id": 35,
+        "name": "Anillo Luna",
+        "description": "Anillo de cuentas de cristal checo",
+        "price": 39.99,
+        "categoryId": 3,
+        "imageURL": "/src/assets/img/anillo_10.png"
+    },
+    {
+        "id": 36,
+        "name": "Pendientes Mariposa",
+        "description": "Pendientes de cuentas de cristal checo",
+        "price": 44.99,
+        "categoryId": 4,
+        "imageURL": "/src/assets/img/pendientes_6.png"
+    },
+    {
+        "id": 37,
+        "name": "Pendientes Luna",
+        "description": "Pendientes de cuentas de cristal checo",
+        "price": 39.99,
+        "categoryId": 4,
+        "imageURL": "/src/assets/img/pendientes_7.png"
+    },
+    {
+        "id": 38,
+        "name": "Pendientes Sol",
+        "description": "Pendientes de cuentas de cristal checo",
+        "price": 34.99,
+        "categoryId": 4,
+        "imageURL": "/src/assets/img/pendientes_8.png"
+    },
+    {
+        "id": 39,
+        "name": "Pendientes Flor",
+        "description": "Pendientes de cuentas de cristal checo",
+        "price": 29.99,
+        "categoryId": 4,
+        "imageURL": "/src/assets/img/pendientes_9.png"
+    },
+    {
+        "id": 40,
+        "name": "Pendientes Aro",
+        "description": "Pendientes de cuentas de cristal checo",
+        "price": 24.99,
+        "categoryId": 4,
+        "imageURL": "/src/assets/img/pendientes_10.png"
+    },
+    {
+        "id": 41,
+        "name": "Collar Diamante",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 59.99,
+        "categoryId": 1,
+        "imageURL": "/src/assets/img/banner_9.jpg"
+    },
+    {
+        "id": 42,
+        "name": "Collar Esmeralda",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 69.99,
+        "categoryId": 1,
+        "imageURL": "/src/assets/img/banner_10.jpg"
+    },
+    {
+        "id": 43,
+        "name": "Collar Rubí",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 79.99,
+        "categoryId": 1,
+        "imageURL": "/src/assets/img/banner_11.jpg"
+    },
+    {
+        "id": 44,
+        "name": "Collar Zafiro",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 89.99,
+        "categoryId": 1,
+        "imageURL": "/src/assets/img/banner_12.jpg"
+    },
+    {
+        "id": 45,
+        "name": "Collar Cristal",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 49.99,
+        "categoryId": 1,
+        "imageURL": "/src/assets/img/banner_13.jpg"
+    },
+    {
+        "id": 46,
+        "name": "Pulsera Diamante",
+        "description": "Pulsera de cuentas de cristal checo",
+        "price": 39.99,
+        "categoryId": 2,
+        "imageURL": "/src/assets/img/pulsera_10.png"
+    },
+    {
+        "id": 47,
+        "name": "Pulsera Esmeralda",
+        "description": "Pulsera de cuentas de cristal checo",
+        "price": 49.99,
+        "categoryId": 2,
+        "imageURL": "/src/assets/img/pulsera_11.png"
+    },
+    {
+        "id": 48,
+        "name": "Pulsera Rubí",
+        "description": "Pulsera de cuentas de cristal checo",
+        "price": 59.99,
+        "categoryId": 2,
+        "imageURL": "/src/assets/img/pulsera_12.png"
+    },
+    {
+        "id": 49,
+        "name": "Pulsera Zafiro",
+        "description": "Pulsera de cuentas de cristal checo",
+        "price": 69.99,
+        "categoryId": 2,
+        "imageURL": "/src/assets/img/pulsera_12.png"
+    },
+
+    {
+        "id": 50,
+        "name": "Collar Cute",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 99.99,
+        "categoryId": 1,
+        "imageURL": "/src/assets/img/banner_14.jpg"
+    },
+    {
+        "id": 51,
+        "name": "Collar Brillo",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 109.99,
+        "categoryId": 1,
+        "imageURL": "/src/assets/img/banner_15.jpg"
+    },
+    {
+        "id": 52,
+        "name": "Collar Luz",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 119.99,
+        "categoryId": 1,
+        "imageURL": "/src/assets/img/banner_16.jpg"
+    },
+    {
+        "id": 53,
+        "name": "Collar Encanto",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 89.99,
+        "categoryId": 1,
+        "imageURL": "/src/assets/img/banner_17.jpg"
+    },
+    {
+        "id": 54,
+        "name": "Collar Magia",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 79.99,
+        "categoryId": 1,
+        "imageURL": "/src/assets/img/banner_18.jpg"
+    },
+    {
+        "id": 55,
+        "name": "Collar Amor",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 44.99,
+        "categoryId": 1,
+        "imageURL": "/src/assets/img/banner_19.jpg"
+    },
+    {
+        "id": 56,
+        "name": "Collar Brillo",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 54.99,
+        "categoryId": 1,
+        "imageURL": "/src/assets/img/banner_20.jpg"
+    },
+    {
+        "id": 57,
+        "name": "Collar Luz",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 64.99,
+        "categoryId": 1,
+        "imageURL": "/src/assets/img/banner_21.jpg"
+    },
+    {
+        "id": 58,
+        "name": "Collar Encanto",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 74.99,
+        "categoryId": 1,
+        "imageURL": "/src/assets/img/banner_22.jpg"
+    },
+    {
+        "id": 59,
+        "name": "Collar Magia",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 84.99,
+        "categoryId": 1,
+        "imageURL": "/src/assets/img/banner_23.jpg"
+    },{
+        "id": 60,
+        "name": "Collar Magia",
+        "description": "Collar de cuentas de cristal checo",
+        "price": 84.99,
+        "categoryId": 41,
+        "imageURL": "/src/assets/img/banner_24.jpg"
+    }
+]

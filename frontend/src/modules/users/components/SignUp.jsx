@@ -1,87 +1,88 @@
-import { useState, useRef } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-
-import Errors from '../../common';
-import * as actions from '../actions';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { signup } from '../authActions';
+import { Form, Button, Alert, Container, Card } from 'react-bootstrap';
 
 const SignUp = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        userName: '',
-        password: '',
-        confirmPassword: '',
-        firstName: '',
-        lastName: '',
-        email: ''
-    });
-    const [backendErrors, setBackendErrors] = useState(null);
-    const formRef = useRef(null);
+    const { error, loading } = useSelector(state => state.auth);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [submitted, setSubmitted] = useState(false);
 
-    const handleSubmit = event => {
-        event.preventDefault();
-        if (formRef.current.checkValidity() && formData.password === formData.confirmPassword) {
-            dispatch(actions.signUp({
-                userName: formData.userName.trim(),
-                password: formData.password,
-                firstName: formData.firstName.trim(),
-                lastName: formData.lastName.trim(),
-                email: formData.email.trim()
-            }, () => navigate('/'),
-            errors => setBackendErrors(errors)));
-        } else {
-            setBackendErrors(null);
-            formRef.current.classList.add('was-validated');
-        }
-    };
-
-    const handleChange = (field, value) => {
-        setFormData(prev => ({ ...prev, [field]: value }));
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setSubmitted(true);
+        dispatch(signup({ username, password, firstName, lastName, email }));
     };
 
     return (
-        <div>
-            <Errors errors={backendErrors} onClose={() => setBackendErrors(null)} />
-            <div className="card">
-                <h5 className="card-header">Sign Up</h5>
-                <div className="card-body">
-                    <form ref={formRef} noValidate onSubmit={handleSubmit} className="needs-validation">
-                        <div className="form-group">
-                            <label>Username</label>
-                            <input type="text" className="form-control" required value={formData.userName}
-                                onChange={e => handleChange('userName', e.target.value)} />
-                        </div>
-                        <div className="form-group">
-                            <label>Password</label>
-                            <input type="password" className="form-control" required value={formData.password}
-                                onChange={e => handleChange('password', e.target.value)} />
-                        </div>
-                        <div className="form-group">
-                            <label>Confirm Password</label>
-                            <input type="password" className="form-control" required value={formData.confirmPassword}
-                                onChange={e => handleChange('confirmPassword', e.target.value)} />
-                        </div>
-                        <div className="form-group">
-                            <label>First Name</label>
-                            <input type="text" className="form-control" required value={formData.firstName}
-                                onChange={e => handleChange('firstName', e.target.value)} />
-                        </div>
-                        <div className="form-group">
-                            <label>Last Name</label>
-                            <input type="text" className="form-control" required value={formData.lastName}
-                                onChange={e => handleChange('lastName', e.target.value)} />
-                        </div>
-                        <div className="form-group">
-                            <label>Email</label>
-                            <input type="email" className="form-control" required value={formData.email}
-                                onChange={e => handleChange('email', e.target.value)} />
-                        </div>
-                        <button type="submit" className="btn btn-primary">Submit</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+        <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
+            <Card className="w-100" style={{ maxWidth: '400px' }}>
+                <Card.Body>
+                    <h2 className="text-center mb-4">Sign Up</h2>
+                    {submitted && error && <Alert variant="danger">{error}</Alert>}
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group controlId="formBasicUsername" className="mb-3">
+                            <Form.Label>Username</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter username"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                required
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formBasicPassword" className="mb-3">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control
+                                type="password"
+                                placeholder="Enter password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formBasicFirstName" className="mb-3">
+                            <Form.Label>First Name</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter first name"
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
+                                required
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formBasicLastName" className="mb-3">
+                            <Form.Label>Last Name</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter last name"
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
+                                required
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formBasicEmail" className="mb-3">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control
+                                type="email"
+                                placeholder="Enter email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                        </Form.Group>
+                        <Button variant="primary" type="submit" disabled={loading} className="w-100">
+                            {loading ? 'Signing up...' : 'Sign Up'}
+                        </Button>
+                    </Form>
+                </Card.Body>
+            </Card>
+        </Container>
     );
 };
 
