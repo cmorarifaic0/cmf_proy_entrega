@@ -1,66 +1,55 @@
 package cris.noroc.rest.common;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
-
-import org.springframework.beans.factory.annotation.Value;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
-import java.security.Key;
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
-import cris.noroc.rest.common.JwtGenerator;
+public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
+    private final AuthenticationManager authenticationManager;
 
-    private final JwtGenerator jwtGenerator;
-
-    private final Key key;
-
-    public JwtAuthenticationFilter(JwtGenerator jwtGenerator, @Value("${jwt.secret}") String secret) {
-        super(authenticationManager -> null);
-        this.jwtGenerator = jwtGenerator;
-        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
+        setFilterProcessesUrl("/auth/login"); // Custom login URL
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        String header = request.getHeader("Authorization");
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+        try {
+            // Extract username and password from request
+            Map<String, String> credentials = new ObjectMapper().readValue(request.getInputStream(), HashMap.class);
+            String username = credentials.get("username");
+            String password = credentials.get("password");
 
-        if (header == null || !header.startsWith("Bearer ")) {
-            chain.doFilter(request, response);
-            return;
+            // Create authentication token
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+
+            // Authenticate the token
+            return authenticationManager.authenticate(authenticationToken);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to parse authentication request body", e);
         }
+    }
 
-        String token = header.substring(7);
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+    @Override
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
+        // Handle successful authentication (e.g., generate JWT and add it to the response)
+    }
 
-        String username = claims.getSubject();
-        String role = (String) claims.get("role");
-
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    username, null, Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role))
-            );
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
-
-        chain.doFilter(request, response);
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
+        // Handle unsuccessful authentication
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write("Authentication Failed: " + failed.getMessage());
     }
 }
