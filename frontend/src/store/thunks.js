@@ -9,7 +9,7 @@ import {
     fetchNewlyAddedProductsRequest, fetchNewlyAddedProductsSuccess, fetchNewlyAddedProductsFailure,
     fetchProductByIdRequest, fetchProductByIdSuccess, fetchProductByIdFailure
 } from '../modules/catalog/actions';
-import { 
+import {
     addToCartRequest, addToCartSuccess, addToCartFailure,
     updateCartItemRequest, updateCartItemSuccess, updateCartItemFailure,
     removeFromCartRequest, removeFromCartSuccess, removeFromCartFailure,
@@ -18,7 +18,6 @@ import {
 import backend from '../backend';
 
 // User thunks
-
 export const signup = (userData) => async (dispatch) => {
     dispatch(signupRequest());
     try {
@@ -79,17 +78,25 @@ export const fetchProductsByCategory = (categoryName) => async (dispatch) => {
     }
 };
 
-export const addToCart = (userId, shoppingCartId, productId, quantity) => async (dispatch) => {
+export const fetchNewlyAddedProducts = () => async (dispatch) => {
+    dispatch(fetchNewlyAddedProductsRequest());
+    try {
+        const response = await backend.catalogService.getNewlyAddedProducts();
+        dispatch(fetchNewlyAddedProductsSuccess(response.data));
+    } catch (error) {
+        dispatch(fetchNewlyAddedProductsFailure(error.message));
+    }
+};
+export const addToCart = (productId, quantity) => async (dispatch) => {
     dispatch(addToCartRequest());
     try {
-        const params = { productId, quantity };
-        const response = await backend.shoppingService.addToCart(userId, shoppingCartId, params);
+        const response = await backend.shoppingService.addToCart(productId, quantity);
         dispatch(addToCartSuccess(response.data));
     } catch (error) {
         dispatch(addToCartFailure(error.message));
     }
 };
-
+// Thunk for updating cart item quantity
 export const updateCartItemQuantity = (userId, shoppingCartId, productId, quantity) => async (dispatch) => {
     dispatch(updateCartItemRequest());
     try {
@@ -101,17 +108,18 @@ export const updateCartItemQuantity = (userId, shoppingCartId, productId, quanti
     }
 };
 
+// Thunk for removing item from cart
 export const removeFromCart = (userId, shoppingCartId, productId) => async (dispatch) => {
-    dispatch(removeFromCartRequest());
+    dispatch(removeFromCartRequest(productId));
     try {
-        const params = { productId };
-        const response = await backend.shoppingService.removeCartItem(userId, shoppingCartId, params);
-        dispatch(removeFromCartSuccess(response.data));
+        const response = await backend.shoppingService.removeCartItem(userId, shoppingCartId, productId);
+        dispatch(removeFromCartSuccess(productId));
     } catch (error) {
         dispatch(removeFromCartFailure(error.message));
     }
 };
 
+// Thunk for buying items in cart
 export const buy = (userId, shoppingCartId, postalAddress, postalCode) => async (dispatch) => {
     dispatch(buyRequest());
     try {
@@ -120,15 +128,5 @@ export const buy = (userId, shoppingCartId, postalAddress, postalCode) => async 
         dispatch(buySuccess(response.data));
     } catch (error) {
         dispatch(buyFailure(error.message));
-    }
-};
-
-export const fetchNewlyAddedProducts = () => async (dispatch) => {
-    dispatch(fetchNewlyAddedProductsRequest());
-    try {
-        const response = await backend.catalogService.getNewlyAddedProducts();
-        dispatch(fetchNewlyAddedProductsSuccess(response.data));
-    } catch (error) {
-        dispatch(fetchNewlyAddedProductsFailure(error.message));
     }
 };

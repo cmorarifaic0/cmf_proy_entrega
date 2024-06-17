@@ -1,17 +1,20 @@
+// src/modules/shopping/components/Cart.jsx
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Container, Row, Col, Card } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
-import { removeFromCartRequest, updateCartItemRequest } from '../../shopping/cartActions';
+import { removeFromCart, updateCartItemQuantity } from '../../../store/thunks';
 
 const Cart = () => {
     const cart = useSelector(state => state.cart);
     const dispatch = useDispatch();
 
     const handleRemove = (productId) => {
-        dispatch(removeFromCartRequest(productId));
+        const userId = 1; // Replace with actual user ID
+        const shoppingCartId = 1; // Replace with actual shopping cart ID
+        dispatch(removeFromCart(userId, shoppingCartId, productId));
         Swal.fire({
             icon: 'success',
             title: 'Eliminado de la cesta',
@@ -22,7 +25,9 @@ const Cart = () => {
     };
 
     const handleQuantityChange = (productId, quantity) => {
-        dispatch(updateCartItemRequest(productId, quantity));
+        const userId = 1; // Replace with actual user ID
+        const shoppingCartId = 1; // Replace with actual shopping cart ID
+        dispatch(updateCartItemQuantity(userId, shoppingCartId, productId, quantity));
     };
 
     if (!cart.items.length) {

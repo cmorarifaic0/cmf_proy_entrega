@@ -18,7 +18,7 @@ const Footer = ({ year }) => {
                             </div>
                             <div className="col-sm">
                                 <h3 className="my-3">CONTACTO</h3>
-                                <p className="my-3"><Link to="/contacto">Póngase en contacto con nosotros</Link></p>
+                                <p className="my-3"><Link to="/contacto">Teléfono de contacto</Link></p>
                                 <p className="my-3"><Link to="/contacto/correo">Correo electrónico</Link></p>
                                 <p className="my-3"><Link to="/contacto/whatsapp">WhatsApp</Link></p>
                             </div>

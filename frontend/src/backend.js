@@ -6,6 +6,9 @@ const backend = {
         signup: (userData) => apiClient.post('/auth/register', userData),
         getUserProfile: (userId) => apiClient.get(`/users/${userId}`),
     },
+    shoppingService: {
+        addToCart: (productId, quantity) => apiClient.post(`/cart/add`, { productId, quantity }),
+    },
     init: (errorHandler) => {
         apiClient.interceptors.response.use(
             (response) => response,

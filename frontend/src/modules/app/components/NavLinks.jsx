@@ -18,9 +18,9 @@ import ForgotPassword from '../../users/components/ForgotPassword';
 const NavLinks = () => {
     return (
         <>
-            <Header />
+
             <TopBanner />
-            <div className="main-content pt-5 mt-5">
+            <div className="main-content">
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/catalog" element={<Catalog />} />

@@ -15,7 +15,7 @@
     display: inline-block;
     padding-left: 100%;
     padding-top: 10px;;
-    animation: scrollText 25s linear infinite;
+    animation: scrollText 30s linear infinite;
 }
 
 @keyframes scrollText {

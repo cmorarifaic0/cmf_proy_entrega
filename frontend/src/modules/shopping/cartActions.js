@@ -44,8 +44,9 @@ export const updateCartItemFailure = (error) => ({
     payload: error
 });
 
-export const removeFromCartRequest = () => ({
-    type: REMOVE_FROM_CART_REQUEST
+export const removeFromCartRequest = (productId) => ({
+    type: REMOVE_FROM_CART_REQUEST,
+    payload: productId
 });
 
 export const removeFromCartSuccess = (productId) => ({
