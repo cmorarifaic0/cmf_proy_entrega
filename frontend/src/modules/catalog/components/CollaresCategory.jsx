@@ -10,7 +10,6 @@ const CollaresCategory = () => {
         Swal.fire({
             title: "Añadido",
             iconHtml: '<img src="/src/assets/img/fresa_shake_shake.gif" style="width: 150px; height: 150px;">',
-            text: "¡Con éxito!",
             text: `${productName} ha sido añadido a la cesta.`,
             showConfirmButton: false,
             timer: 1500,
