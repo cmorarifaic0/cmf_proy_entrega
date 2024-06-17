@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-    baseURL: 'http://localhost:8080/api',
+    baseURL: 'http://localhost:9000/api',
     headers: {
         'Content-Type': 'application/json'
     },
@@ -17,18 +17,6 @@ apiClient.interceptors.request.use(
         return config;
     },
     error => {
-        return Promise.reject(error);
-    }
-);
-
-apiClient.interceptors.response.use(
-    response => {
-        return response;
-    },
-    error => {
-        if (error.response.status === 401) {
-            // Handle unauthorized errors (e.g., redirect to login page)
-        }
         return Promise.reject(error);
     }
 );

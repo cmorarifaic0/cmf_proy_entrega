@@ -8,7 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
+public class UserDetails {
 
     @Autowired
     private UserRepository userRepository;
@@ -32,11 +32,6 @@ public class UserService {
                     user.setRole(updatedUser.getRole());
                     return userRepository.save(user);
                 })
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-    }
-
-    public User findByUsername(String username) {
-        return userRepository.findByUserName(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }

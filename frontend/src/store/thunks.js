@@ -79,24 +79,7 @@ export const fetchProductsByCategory = (categoryName) => async (dispatch) => {
     }
 };
 
-export const fetchNewlyAddedProducts = () => async (dispatch) => {
-    dispatch(fetchNewlyAddedProductsRequest());
-    try {
-        const response = await backend.catalogService.getNewlyAddedProducts();
-        dispatch(fetchNewlyAddedProductsSuccess(response.data));
-    } catch (error) {
-        dispatch(fetchNewlyAddedProductsFailure(error.message));
-    }
-};
-export const addToCart = (productId, quantity) => async (dispatch) => {
-    dispatch(addToCartRequest());
-    try {
-        const response = await backend.shoppingService.addToCart(productId, quantity);
-        dispatch(addToCartSuccess(response.data));
-    } catch (error) {
-        dispatch(addToCartFailure(error.message));
-    }
-};
+
 // Thunk for updating cart item quantity
 
 export const updateCartItemQuantity = (userId, shoppingCartId, productId, quantity) => async (dispatch) => {

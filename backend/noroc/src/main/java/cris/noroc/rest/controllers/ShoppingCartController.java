@@ -2,7 +2,6 @@ package cris.noroc.rest.controllers;
 
 import cris.noroc.model.services.ShoppingService;
 import cris.noroc.rest.dtos.AddToShoppingCartParamsDto;
-import cris.noroc.rest.dtos.ShoppingCartDto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import cris.noroc.model.exceptions.*;

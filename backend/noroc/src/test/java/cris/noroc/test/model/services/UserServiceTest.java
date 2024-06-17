@@ -11,7 +11,7 @@ import cris.noroc.model.exceptions.InstanceNotFoundException;
 import cris.noroc.model.entities.User;
 import cris.noroc.model.exceptions.IncorrectLoginException;
 import cris.noroc.model.exceptions.IncorrectPasswordException;
-import cris.noroc.model.services.UserService;
+import cris.noroc.model.services.UserDetails;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,7 +23,7 @@ public class UserServiceTest {
 	private final Long NON_EXISTENT_ID = Long.valueOf(-1);
 	
 	@Autowired
-	private UserService userService;
+	private UserDetails userService;
 	
 	private User createUser(String userName) {
 		return new User(userName, "password", "firstName", "lastName", userName + "@" + userName + ".com");

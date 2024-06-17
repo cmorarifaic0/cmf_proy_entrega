@@ -2,7 +2,7 @@ package cris.noroc.model.entities;
 
 import jakarta.persistence.*;
 
-import java.util.Optional;
+//import java.util.Optional;
 
 @Entity
 @Table(name = "ShoppingCartItem")

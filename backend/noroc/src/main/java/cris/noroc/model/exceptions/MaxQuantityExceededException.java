@@ -1,9 +1,9 @@
 package cris.noroc.model.exceptions;
 
-@SuppressWarnings("serial")
+
 public class MaxQuantityExceededException extends Exception {
 	
-	private int maxAllowedIncrement;
+	private final int maxAllowedIncrement;
 	
 	public MaxQuantityExceededException(int maxAllowedIncrement) {
 		this.maxAllowedIncrement = maxAllowedIncrement;

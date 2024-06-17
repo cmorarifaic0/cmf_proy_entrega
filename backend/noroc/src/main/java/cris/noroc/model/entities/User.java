@@ -1,13 +1,18 @@
 package cris.noroc.model.entities;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import java.util.Collection;
+import java.util.Collections;
 
 @Entity
 @Table(name = "UserTable")
-public class User {
+public class User implements UserDetails {
 
     public enum RoleType { USER, ADMIN, GUEST };
 
@@ -57,6 +62,37 @@ public class User {
     }
 
     // Getters and Setters
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.emptyList(); // Replace with actual authorities if applicable
+    }
+
+    @Override
+    public String getUsername() {
+        return userName;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
     public Long getId() {
         return id;
     }

@@ -1,4 +1,7 @@
 package cris.noroc.model.exceptions;
 
-@SuppressWarnings("serial")
-public class MaxItemsExceededException extends Exception {}
+public class MaxItemsExceededException extends Exception {
+    public MaxItemsExceededException() {
+        super("Max items exceeded");
+    }
+}

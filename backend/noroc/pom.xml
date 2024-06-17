@@ -108,7 +108,12 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Jakarta Servlet API -->
+        <!-- Jakarta  -->
+        <dependency>
+         <groupId>jakarta.persistence</groupId>
+         <artifactId>jakarta.persistence-api</artifactId>
+      </dependency>
+
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>

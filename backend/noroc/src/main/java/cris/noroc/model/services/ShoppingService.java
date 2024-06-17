@@ -21,9 +21,6 @@ public class ShoppingService {
     private static final int MAX_QUANTITY = 100;  // Example maximum quantity
 
     @Autowired
-    private PermissionChecker permissionChecker;
-
-    @Autowired
     private ProductRepository productRepository;
 
     @Autowired
@@ -39,14 +36,15 @@ public class ShoppingService {
     private ShoppingCartRepository shoppingCartRepository;
 
     public ShoppingCart addToShoppingCart(Long userId, Long shoppingCartId, AddToShoppingCartParamsDto params)
-            throws InstanceNotFoundException, PermissionException, MaxQuantityExceededException, MaxItemsExceededException {
+            throws InstanceNotFoundException, MaxQuantityExceededException {
 
-        ShoppingCart shoppingCart = permissionChecker.checkShoppingCartExistsAndBelongsTo(shoppingCartId, userId);
         Optional<Product> product = productRepository.findById(params.getProductId());
 
         if (!product.isPresent()) {
             throw new InstanceNotFoundException("project.entities.product", params.getProductId());
         }
+
+        ShoppingCart shoppingCart = getShoppingCartById(shoppingCartId);
 
         Optional<ShoppingCartItem> existingCartItem = shoppingCart.getItem(params.getProductId());
 
@@ -69,9 +67,9 @@ public class ShoppingService {
     }
 
     public ShoppingCart updateShoppingCartItemQuantity(Long userId, Long shoppingCartId, Long productId, int quantity)
-            throws InstanceNotFoundException, PermissionException, MaxQuantityExceededException {
+            throws InstanceNotFoundException, MaxQuantityExceededException {
         
-        ShoppingCart shoppingCart = permissionChecker.checkShoppingCartExistsAndBelongsTo(shoppingCartId, userId);
+        ShoppingCart shoppingCart = getShoppingCartById(shoppingCartId);
         Optional<ShoppingCartItem> existingCartItem = shoppingCart.getItem(productId);
 
         if (!existingCartItem.isPresent()) {
@@ -88,9 +86,9 @@ public class ShoppingService {
     }
 
     public ShoppingCart removeShoppingCartItem(Long userId, Long shoppingCartId, Long productId)
-            throws InstanceNotFoundException, PermissionException {
+            throws InstanceNotFoundException {
         
-        ShoppingCart shoppingCart = permissionChecker.checkShoppingCartExistsAndBelongsTo(shoppingCartId, userId);
+        ShoppingCart shoppingCart = getShoppingCartById(shoppingCartId);
         Optional<ShoppingCartItem> existingCartItem = shoppingCart.getItem(productId);
 
         if (!existingCartItem.isPresent()) {
@@ -104,9 +102,9 @@ public class ShoppingService {
     }
 
     public Order buy(Long userId, Long shoppingCartId, String postalAddress, String postalCode)
-            throws InstanceNotFoundException, PermissionException, EmptyShoppingCartException {
+            throws InstanceNotFoundException, EmptyShoppingCartException {
 
-        ShoppingCart shoppingCart = permissionChecker.checkShoppingCartExistsAndBelongsTo(shoppingCartId, userId);
+        ShoppingCart shoppingCart = getShoppingCartById(shoppingCartId);
 
         if (shoppingCart.isEmpty()) {
             throw new EmptyShoppingCartException();
@@ -117,7 +115,6 @@ public class ShoppingService {
         orderRepository.save(order);
 
         for (ShoppingCartItem shoppingCartItem : shoppingCart.getItems()) {
-
             OrderItem orderItem = new OrderItem(shoppingCartItem.getProduct(),
                     shoppingCartItem.getProduct().getPrice(), shoppingCartItem.getQuantity());
 
@@ -132,13 +129,23 @@ public class ShoppingService {
     }
 
     @Transactional(readOnly = true)
-    public Order findOrder(Long userId, Long orderId) throws InstanceNotFoundException, PermissionException {
-        return permissionChecker.checkOrderExistsAndBelongsTo(orderId, userId);
+    public Order findOrder(Long userId, Long orderId) throws InstanceNotFoundException {
+        return checkOrderExistsAndBelongsTo(orderId, userId);
     }
 
     @Transactional(readOnly = true)
     public Block<Order> findOrders(Long userId, int page, int size) {
         Slice<Order> slice = orderRepository.findByUserIdOrderByDateDesc(userId, PageRequest.of(page, size));
         return new Block<>(slice.getContent(), slice.hasNext());
+    }
+
+    private ShoppingCart getShoppingCartById(Long shoppingCartId) throws InstanceNotFoundException {
+        return shoppingCartRepository.findById(shoppingCartId)
+                .orElseThrow(() -> new InstanceNotFoundException("project.entities.shoppingCart", shoppingCartId));
+    }
+
+    private Order checkOrderExistsAndBelongsTo(Long orderId, Long userId) throws InstanceNotFoundException {
+        return orderRepository.findByIdAndUserId(orderId, userId)
+                .orElseThrow(() -> new InstanceNotFoundException("project.entities.order", orderId));
     }
 }

@@ -32,7 +32,7 @@ import cris.noroc.model.services.Block;
 import cris.noroc.model.exceptions.EmptyShoppingCartException;
 import cris.noroc.model.exceptions.PermissionException;
 import cris.noroc.model.services.ShoppingService;
-import cris.noroc.model.services.UserService;
+import cris.noroc.model.services.UserDetails;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,7 +44,7 @@ public class ShoppingServiceTest {
 	private final Long NON_EXISTENT_ID = Long.valueOf(-1);
 	
 	@Autowired
-	private UserService userService;
+	private UserDetails userService;
 	
 	@Autowired
 	private ShoppingService shoppingService;

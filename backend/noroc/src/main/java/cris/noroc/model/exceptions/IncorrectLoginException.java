@@ -1,10 +1,10 @@
 package cris.noroc.model.exceptions;
 
-@SuppressWarnings("serial")
+
 public class IncorrectLoginException extends Exception {
 	
-	private String userName;
-	private String password;
+	private final String userName;
+	private final String password;
 
 	public IncorrectLoginException(String userName, String password) {
 		

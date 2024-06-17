@@ -58,7 +58,7 @@ const Login = () => {
                         <Form.Group controlId="formBasicCheckbox" className="mb-3">
                             <Form.Check
                                 type="checkbox"
-                                label="I agree to the terms and conditions"
+                                label="Acepto los términos y condiciones"
                                 checked={termsAccepted}
                                 onChange={(e) => setTermsAccepted(e.target.checked)}
                                 isInvalid={submitted && !termsAccepted}
