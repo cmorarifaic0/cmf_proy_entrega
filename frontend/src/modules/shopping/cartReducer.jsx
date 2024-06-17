@@ -1,7 +1,7 @@
 import {
     ADD_TO_CART_REQUEST, ADD_TO_CART_SUCCESS, ADD_TO_CART_FAILURE,
     UPDATE_CART_ITEM_REQUEST, UPDATE_CART_ITEM_SUCCESS, UPDATE_CART_ITEM_FAILURE,
-    REMOVE_CART_ITEM_REQUEST, REMOVE_CART_ITEM_SUCCESS, REMOVE_CART_ITEM_FAILURE,
+    REMOVE_FROM_CART_REQUEST, REMOVE_FROM_CART_SUCCESS, REMOVE_FROM_CART_FAILURE,
     BUY_REQUEST, BUY_SUCCESS, BUY_FAILURE
 } from './cartActions';
 
@@ -15,7 +15,7 @@ const cartReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_TO_CART_REQUEST:
         case UPDATE_CART_ITEM_REQUEST:
-        case REMOVE_CART_ITEM_REQUEST:
+        case REMOVE_FROM_CART_REQUEST:
         case BUY_REQUEST:
             return {
                 ...state,
@@ -36,7 +36,7 @@ const cartReducer = (state = initialState, action) => {
                     item.id === action.payload.id ? action.payload : item
                 )
             };
-        case REMOVE_CART_ITEM_SUCCESS:
+        case REMOVE_FROM_CART_SUCCESS:
             return {
                 ...state,
                 loading: false,
@@ -50,7 +50,7 @@ const cartReducer = (state = initialState, action) => {
             };
         case ADD_TO_CART_FAILURE:
         case UPDATE_CART_ITEM_FAILURE:
-        case REMOVE_CART_ITEM_FAILURE:
+        case REMOVE_FROM_CART_FAILURE:
         case BUY_FAILURE:
             return {
                 ...state,

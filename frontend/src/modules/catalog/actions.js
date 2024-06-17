@@ -103,10 +103,7 @@ export const addNewProduct = (product) => ({
     type: actionTypes.ADD_NEW_PRODUCT,
     payload: product,
 });
-export const addToCart = (productId) => ({
-    type: actionTypes.ADD_TO_CART,
-    payload: productId,
-});
+
 export const fetchProductsByCategory = (categoryName) => async (dispatch) => {
     dispatch({ type: actionTypes.FETCH_PRODUCTS_REQUEST });
     try {
