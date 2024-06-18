@@ -1,8 +1,8 @@
+// src/modules/shopping/cartReducer.js
+
 import {
     ADD_TO_CART_REQUEST, ADD_TO_CART_SUCCESS, ADD_TO_CART_FAILURE,
-    UPDATE_CART_ITEM_REQUEST, UPDATE_CART_ITEM_SUCCESS, UPDATE_CART_ITEM_FAILURE,
-    REMOVE_FROM_CART_REQUEST, REMOVE_FROM_CART_SUCCESS, REMOVE_FROM_CART_FAILURE,
-    BUY_REQUEST, BUY_SUCCESS, BUY_FAILURE
+    REMOVE_FROM_CART_REQUEST, REMOVE_FROM_CART_SUCCESS, REMOVE_FROM_CART_FAILURE
 } from './cartActions';
 
 const initialState = {
@@ -14,9 +14,7 @@ const initialState = {
 const cartReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_TO_CART_REQUEST:
-        case UPDATE_CART_ITEM_REQUEST:
         case REMOVE_FROM_CART_REQUEST:
-        case BUY_REQUEST:
             return {
                 ...state,
                 loading: true,
@@ -28,30 +26,14 @@ const cartReducer = (state = initialState, action) => {
                 loading: false,
                 items: [...state.items, action.payload]
             };
-        case UPDATE_CART_ITEM_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                items: state.items.map(item =>
-                    item.id === action.payload.id ? action.payload : item
-                )
-            };
         case REMOVE_FROM_CART_SUCCESS:
             return {
                 ...state,
                 loading: false,
                 items: state.items.filter(item => item.id !== action.payload)
             };
-        case BUY_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                items: []
-            };
         case ADD_TO_CART_FAILURE:
-        case UPDATE_CART_ITEM_FAILURE:
         case REMOVE_FROM_CART_FAILURE:
-        case BUY_FAILURE:
             return {
                 ...state,
                 loading: false,

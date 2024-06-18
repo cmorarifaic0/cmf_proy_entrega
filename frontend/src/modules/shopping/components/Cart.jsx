@@ -1,84 +1,46 @@
-// src/modules/shopping/components/Cart.jsx
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Button, Container, Row, Col, Card } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import Swal from 'sweetalert2';
-import { removeFromCart, updateCartItemQuantity } from '../../../store/thunks';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeFromCart, clearCart } from '../store/cartActions';
+import { Button, ListGroup, Container, Card } from 'react-bootstrap';
+
+const conversionRate = 0.85; // 1 USD = 0.85 EUR
 
 const Cart = () => {
-    const cart = useSelector(state => state.cart);
     const dispatch = useDispatch();
+    const cartItems = useSelector(state => state.cart.items);
 
-    const handleRemove = (productId) => {
-        const userId = 1; // Replace with actual user ID
-        const shoppingCartId = 1; // Replace with actual shopping cart ID
-        dispatch(removeFromCart(userId, shoppingCartId, productId));
-        Swal.fire({
-            icon: 'success',
-            title: 'Eliminado de la cesta',
-            text: 'El producto ha sido eliminado de la cesta.',
-            showConfirmButton: false,
-            timer: 1500
-        });
+    const handleRemove = (itemId) => {
+        dispatch(removeFromCart(itemId));
     };
 
-    const handleQuantityChange = (productId, quantity) => {
-        const userId = 1; // Replace with actual user ID
-        const shoppingCartId = 1; // Replace with actual shopping cart ID
-        dispatch(updateCartItemQuantity(userId, shoppingCartId, productId, quantity));
+    const handleClearCart = () => {
+        dispatch(clearCart());
     };
-
-    if (!cart.items.length) {
-        return (
-            <Container className="mt-5">
-                <h2>Tu carrito está vacío</h2>
-            </Container>
-        );
-    }
 
     return (
-        <Container className="mt-5">
-            <h2>Carrito de Compras</h2>
-            <Row>
-                {cart.items.map(item => (
-                    <Col key={item.id} sm={12} md={6} lg={4} className="mb-4">
-                        <Card>
-                            <Card.Img variant="top" src={item.imageURL} alt={item.name} />
-                            <Card.Body>
-                                <Card.Title>{item.name}</Card.Title>
-                                <Card.Text>{item.description}</Card.Text>
-                                <Card.Text>${item.price}</Card.Text>
-                                <div className="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <Button
-                                            variant="danger"
-                                            onClick={() => handleRemove(item.id)}
-                                        >
-                                            <FontAwesomeIcon icon={faTrash} />
-                                        </Button>
-                                    </div>
-                                    <div>
-                                        <input
-                                            type="number"
-                                            min="1"
-                                            value={item.quantity}
-                                            onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value))}
-                                            style={{ width: '60px' }}
-                                        />
-                                    </div>
-                                </div>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                ))}
-            </Row>
-            <div className="text-end mt-4">
-                <Button variant="primary" onClick={() => Swal.fire('Checkout coming soon!')}>
-                    Proceder al Pago
-                </Button>
-            </div>
+        <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
+            <Card className="w-100" style={{ maxWidth: '600px' }}>
+                <Card.Body>
+                    <h2 className="text-center mb-4">Cart</h2>
+                    <ListGroup>
+                        {cartItems.map(item => (
+                            <ListGroup.Item key={item.id}>
+                                {item.name} - €{(item.price * conversionRate).toFixed(2)}
+                                <Button
+                                    variant="danger"
+                                    className="float-end"
+                                    onClick={() => handleRemove(item.id)}
+                                >
+                                    Remove
+                                </Button>
+                            </ListGroup.Item>
+                        ))}
+                    </ListGroup>
+                    <Button className="w-100 mt-3" variant="danger" onClick={handleClearCart}>
+                        Clear Cart
+                    </Button>
+                </Card.Body>
+            </Card>
         </Container>
     );
 };

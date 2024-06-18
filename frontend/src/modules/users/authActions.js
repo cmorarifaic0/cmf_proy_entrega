@@ -1,73 +1,29 @@
 import * as actionTypes from './actionTypes';
 import backend from '../../backend';
+import Swal from 'sweetalert2';
 
-// Login actions
-export const loginRequest = () => ({
-    type: actionTypes.LOGIN_REQUEST
-});
+export const LOGIN_REQUEST = 'LOGIN_REQUEST';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const SIGNUP_REQUEST = 'SIGNUP_REQUEST';
+export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
+export const LOGOUT = 'LOGOUT';
 
-export const loginSuccess = (user, token) => ({
-    type: actionTypes.LOGIN_SUCCESS,
-    payload: { user, token }
-});
+// Action Creators
+const loginRequest = () => ({ type: LOGIN_REQUEST });
+const loginSuccess = (user) => ({ type: LOGIN_SUCCESS, payload: user });
+const signupRequest = () => ({ type: SIGNUP_REQUEST });
+const signupSuccess = (user) => ({ type: SIGNUP_SUCCESS, payload: user });
+const logoutAction = () => ({ type: LOGOUT });
 
-export const loginFailure = (error) => ({
-    type: actionTypes.LOGIN_FAILURE,
-    payload: error
-});
-
-// Logout action
-export const logout = () => ({
-    type: actionTypes.LOGOUT
-});
-
-// Signup actions
-export const signupRequest = () => ({
-    type: actionTypes.SIGNUP_REQUEST
-});
-
-export const signupSuccess = (user) => ({
-    type: actionTypes.SIGNUP_SUCCESS,
-    payload: user
-});
-
-export const signupFailure = (error) => ({
-    type: actionTypes.SIGNUP_FAILURE,
-    payload: error
-});
-
-// Fetch user profile actions
-export const fetchUserProfileRequest = () => ({
-    type: actionTypes.FETCH_USER_PROFILE_REQUEST
-});
-
-export const fetchUserProfileSuccess = (profile) => ({
-    type: actionTypes.FETCH_USER_PROFILE_SUCCESS,
-    payload: profile
-});
-
-export const fetchUserProfileFailure = (error) => ({
-    type: actionTypes.FETCH_USER_PROFILE_FAILURE,
-    payload: error
-});
-
-// Thunks for async actions
 export const login = (username, password) => async (dispatch) => {
     dispatch(loginRequest());
     try {
         const response = await backend.authService.login(username, password);
-        const { token } = response.data;
-        const user = decodeToken(token); // Function to decode JWT and extract user info
-        dispatch(loginSuccess(user, token));
-        localStorage.setItem('token', token); // Save token in local storage
+        dispatch(loginSuccess(response.data));
+        Swal.fire('Iniciado sesión con éxito', '', 'success');
+        window.location.href = '/';
     } catch (error) {
-        if (error.response && error.response.status === 404) {
-            dispatch(loginFailure({ field: 'username', message: 'Usuario incorrecto o no existe' }));
-        } else if (error.response && error.response.status === 401) {
-            dispatch(loginFailure({ field: 'password', message: 'Contraseña incorrecta' }));
-        } else {
-            dispatch(loginFailure({ field: 'general', message: 'Error de autenticación' }));
-        }
+        Swal.fire('Error de autenticación', '', 'error');
     }
 };
 
@@ -76,33 +32,15 @@ export const signup = (userData) => async (dispatch) => {
     try {
         const response = await backend.authService.signup(userData);
         dispatch(signupSuccess(response.data));
+        Swal.fire('Registro exitoso', '', 'success');
+        window.location.href = '/';
     } catch (error) {
-        dispatch(signupFailure(error.message));
+        Swal.fire('Error de registro', '', 'error');
     }
 };
 
-export const fetchUserProfile = (userId) => async (dispatch) => {
-    dispatch(fetchUserProfileRequest());
-    try {
-        const response = await backend.authService.getUserProfile(userId);
-        dispatch(fetchUserProfileSuccess(response.data));
-    } catch (error) {
-        dispatch(fetchUserProfileFailure(error.message));
-    }
-};
-
-export const tryLoginFromServiceToken = () => async (dispatch) => {
-    try {
-        const response = await apiClient.get('/auth/login-with-token');
-        const data = await response.data;
-        dispatch({ type: actionTypes.LOGIN_SUCCESS, payload: data });
-    } catch (error) {
-        dispatch({ type: actionTypes.LOGIN_FAILURE, payload: error.message });
-    }
-};
-
-const decodeToken = (token) => {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace('-', '+').replace('_', '/');
-    return JSON.parse(window.atob(base64));
+export const logout = () => (dispatch) => {
+    dispatch(logoutAction());
+    localStorage.removeItem('token');
+    window.location.href = '/login';
 };

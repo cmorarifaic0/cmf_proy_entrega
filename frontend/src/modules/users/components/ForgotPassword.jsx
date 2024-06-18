@@ -8,8 +8,6 @@ const ForgotPassword = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Here, you would typically dispatch an action to handle the forgot password logic
-        // For this example, we'll just show a success message
         setMessage('If an account with that email exists, a password reset link has been sent.');
         setSubmitted(true);
     };

@@ -16,7 +16,7 @@ const Navbar = () => {
         <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
             <div className="container-fluid">
                 <Link className="navbar-brand" to="/">Noroc:Design_</Link>
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <button className="navbar-toggler " type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNav">
@@ -48,7 +48,7 @@ const Navbar = () => {
                     </ul>
                     <form className="d-flex">
                         <input className="form-control me-2" type="search" placeholder="Buscar" aria-label="Search" />
-                        <button className="btn bbuscar" type="submit">Buscar</button>
+                        <button className="btn botonn" type="submit">Buscar</button>
                     </form>
                 </div>
             </div>

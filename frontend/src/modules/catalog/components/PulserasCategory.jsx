@@ -5,8 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
 import { addToCart } from '../../../store/thunks';
-import './CollaresCategory.css';
-
 const PulserasCategory = () => {
     const dispatch = useDispatch();
 
@@ -50,7 +48,7 @@ const PulserasCategory = () => {
                                 <p className="card-text">Pulsera 1</p>
                             </Card.Body>
                             <Card.Footer className="text-center">
-                                <Button className="btn banadir" onClick={() => handleAddToCart(1, 'Pulsera 1')}>
+                                <Button className="btn botonn" onClick={() => handleAddToCart(1, 'Pulsera 1')}>
                                     Añadir a la cesta <FontAwesomeIcon icon={faShoppingCart} />
                                 </Button>
                             </Card.Footer>
@@ -63,7 +61,7 @@ const PulserasCategory = () => {
                                 <p className="card-text">Pulsera 2</p>
                             </Card.Body>
                             <Card.Footer className="text-center">
-                                <Button className="btn banadir" onClick={() => handleAddToCart(2, 'Pulsera 2')}>
+                                <Button className="btn botonn" onClick={() => handleAddToCart(2, 'Pulsera 2')}>
                                     Añadir a la cesta <FontAwesomeIcon icon={faShoppingCart} />
                                 </Button>
                             </Card.Footer>
@@ -76,7 +74,7 @@ const PulserasCategory = () => {
                                 <p className="card-text">Pulsera 3</p>
                             </Card.Body>
                             <Card.Footer className="text-center">
-                                <Button className="btn banadir" onClick={() => handleAddToCart(3, 'Pulsera 3')}>
+                                <Button className="btn botonn" onClick={() => handleAddToCart(3, 'Pulsera 3')}>
                                     Añadir a la cesta <FontAwesomeIcon icon={faShoppingCart} />
                                 </Button>
                             </Card.Footer>
@@ -91,7 +89,7 @@ const PulserasCategory = () => {
                                 <p className="card-text">Pulsera 4</p>
                             </Card.Body>
                             <Card.Footer className="text-center">
-                                <Button className="btn banadir" onClick={() => handleAddToCart(4, 'Pulsera 4')}>
+                                <Button className="btn botonn" onClick={() => handleAddToCart(4, 'Pulsera 4')}>
                                     Añadir a la cesta <FontAwesomeIcon icon={faShoppingCart} />
                                 </Button>
                             </Card.Footer>
@@ -104,7 +102,7 @@ const PulserasCategory = () => {
                                 <p className="card-text">Pulsera 5</p>
                             </Card.Body>
                             <Card.Footer className="text-center">
-                                <Button className="btn banadir" onClick={() => handleAddToCart(5, 'Pulsera 5')}>
+                                <Button className="btn botonn" onClick={() => handleAddToCart(5, 'Pulsera 5')}>
                                     Añadir a la cesta <FontAwesomeIcon icon={faShoppingCart} />
                                 </Button>
                             </Card.Footer>
@@ -117,7 +115,7 @@ const PulserasCategory = () => {
                                 <p className="card-text">Pulsera 6</p>
                             </Card.Body>
                             <Card.Footer className="text-center">
-                                <Button className="btn banadir" onClick={() => handleAddToCart(6, 'Pulsera 6')}>
+                                <Button className="btn botonn" onClick={() => handleAddToCart(6, 'Pulsera 6')}>
                                     Añadir a la cesta <FontAwesomeIcon icon={faShoppingCart} />
                                 </Button>
                             </Card.Footer>

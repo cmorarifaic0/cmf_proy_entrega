@@ -50,7 +50,7 @@ const CollaresCategory = () => {
                                 <p className="card-text">Collar 1</p>
                             </Card.Body>
                             <Card.Footer className="text-center">
-                                <Button className="btn banadir" onClick={() => handleAddToCart(1, 'Collar 1')}>
+                                <Button className="btn botonn" onClick={() => handleAddToCart(1, 'Collar 1')}>
                                     Añadir a la cesta <FontAwesomeIcon icon={faShoppingCart} />
                                 </Button>
                             </Card.Footer>
@@ -63,7 +63,7 @@ const CollaresCategory = () => {
                                 <p className="card-text">Collar 2</p>
                             </Card.Body>
                             <Card.Footer className="text-center">
-                                <Button className="btn banadir" onClick={() => handleAddToCart(2, 'Collar 2')}>
+                                <Button className="btn botonn" onClick={() => handleAddToCart(2, 'Collar 2')}>
                                     Añadir a la cesta <FontAwesomeIcon icon={faShoppingCart} />
                                 </Button>
                             </Card.Footer>
@@ -76,7 +76,7 @@ const CollaresCategory = () => {
                                 <p className="card-text">Collar 3</p>
                             </Card.Body>
                             <Card.Footer className="text-center">
-                                <Button className="btn banadir" onClick={() => handleAddToCart(3, 'Collar 3')}>
+                                <Button className="btn botonn" onClick={() => handleAddToCart(3, 'Collar 3')}>
                                     Añadir a la cesta <FontAwesomeIcon icon={faShoppingCart} />
                                 </Button>
                             </Card.Footer>
@@ -91,7 +91,7 @@ const CollaresCategory = () => {
                                 <p className="card-text">Collar 4</p>
                             </Card.Body>
                             <Card.Footer className="text-center">
-                                <Button className="btn banadir" onClick={() => handleAddToCart(4, 'Collar 4')}>
+                                <Button className="btn botonn" onClick={() => handleAddToCart(4, 'Collar 4')}>
                                     Añadir a la cesta <FontAwesomeIcon icon={faShoppingCart} />
                                 </Button>
                             </Card.Footer>
@@ -104,7 +104,7 @@ const CollaresCategory = () => {
                                 <p className="card-text">Collar 5</p>
                             </Card.Body>
                             <Card.Footer className="text-center">
-                                <Button className="btn banadir" onClick={() => handleAddToCart(5, 'Collar 5')}>
+                                <Button className="btn botonn" onClick={() => handleAddToCart(5, 'Collar 5')}>
                                     Añadir a la cesta <FontAwesomeIcon icon={faShoppingCart} />
                                 </Button>
                             </Card.Footer>
@@ -117,7 +117,7 @@ const CollaresCategory = () => {
                                 <p className="card-text">Collar 6</p>
                             </Card.Body>
                             <Card.Footer className="text-center">
-                                <Button className="btn banadir" onClick={() => handleAddToCart(6, 'Collar 6')}>
+                                <Button className="btn botonn" onClick={() => handleAddToCart(6, 'Collar 6')}>
                                     Añadir a la cesta <FontAwesomeIcon icon={faShoppingCart} />
                                 </Button>
                             </Card.Footer>

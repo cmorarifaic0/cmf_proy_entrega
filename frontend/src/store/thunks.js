@@ -1,148 +1,70 @@
-import { 
-    loginRequest, loginSuccess, loginFailure, logout,
-    signupRequest, signupSuccess, signupFailure,
-    fetchUserProfileRequest, fetchUserProfileSuccess, fetchUserProfileFailure
-} from '../modules/users/authActions';
-import { 
-    fetchCategoriesRequest, fetchCategoriesSuccess, fetchCategoriesFailure,
-    fetchProductsRequest, fetchProductsSuccess, fetchProductsFailure,
-    fetchNewlyAddedProductsRequest, fetchNewlyAddedProductsSuccess, fetchNewlyAddedProductsFailure,
-    fetchProductByIdRequest, fetchProductByIdSuccess, fetchProductByIdFailure
-} from '../modules/catalog/actions';
-import {
-    addToCartRequest, addToCartSuccess, addToCartFailure,
-    updateCartItemRequest, updateCartItemSuccess, updateCartItemFailure,
-    removeFromCartRequest, removeFromCartSuccess, removeFromCartFailure,
-    buyRequest, buySuccess, buyFailure
-} from '../modules/shopping/cartActions';
-
+import * as actionTypes from './actionTypes';
 import backend from '../backend';
+import Swal from 'sweetalert2';
 
-// User thunks
+export const LOGIN_REQUEST = 'LOGIN_REQUEST';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const SIGNUP_REQUEST = 'SIGNUP_REQUEST';
+export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
+export const LOGOUT = 'LOGOUT';
+export const ADD_TO_CART = 'ADD_TO_CART';
+export const REMOVE_FROM_CART = 'REMOVE_FROM_CART';
+
+// Action Creators
+const loginRequest = () => ({ type: LOGIN_REQUEST });
+const loginSuccess = (user) => ({ type: LOGIN_SUCCESS, payload: user });
+const signupRequest = () => ({ type: SIGNUP_REQUEST });
+const signupSuccess = (user) => ({ type: SIGNUP_SUCCESS, payload: user });
+const logoutAction = () => ({ type: LOGOUT });
+const addToCartSuccess = (item) => ({ type: ADD_TO_CART, payload: item });
+const removeFromCartSuccess = (itemId) => ({ type: REMOVE_FROM_CART, payload: itemId });
+
+export const login = (username, password) => async (dispatch) => {
+    dispatch(loginRequest());
+    try {
+        const response = await backend.authService.login(username, password);
+        dispatch(loginSuccess(response.data));
+        Swal.fire('Iniciado sesión con éxito', '', 'success');
+        window.location.href = '/';
+    } catch (error) {
+        Swal.fire('Error de autenticación', '', 'error');
+    }
+};
+
 export const signup = (userData) => async (dispatch) => {
     dispatch(signupRequest());
     try {
         const response = await backend.authService.signup(userData);
         dispatch(signupSuccess(response.data));
+        Swal.fire('Registro exitoso', '', 'success');
+        window.location.href = '/';
     } catch (error) {
-        dispatch(signupFailure(error.message));
+        Swal.fire('Error de registro', '', 'error');
     }
 };
 
-export const fetchUserProfile = (userId) => async (dispatch) => {
-    dispatch(fetchUserProfileRequest());
-    try {
-        const response = await backend.userService.getUserProfile(userId);
-        dispatch(fetchUserProfileSuccess(response.data));
-    } catch (error) {
-        dispatch(fetchUserProfileFailure(error.message));
-    }
+export const logout = () => (dispatch) => {
+    dispatch(logoutAction());
+    localStorage.removeItem('token');
+    window.location.href = '/login';
 };
 
-export const fetchCategories = () => async (dispatch) => {
-    dispatch(fetchCategoriesRequest());
+export const addToCart = (productId, quantity) => async (dispatch) => {
     try {
-        const response = await backend.catalogService.getCategories();
-        dispatch(fetchCategoriesSuccess(response.data));
-    } catch (error) {
-        dispatch(fetchCategoriesFailure(error.message));
-    }
-};
-
-export const fetchProducts = () => async (dispatch) => {
-    dispatch(fetchProductsRequest());
-    try {
-        const response = await backend.catalogService.getProducts();
-        dispatch(fetchProductsSuccess(response.data));
-    } catch (error) {
-        dispatch(fetchProductsFailure(error.message));
-    }
-};
-
-export const fetchProductById = (id) => async (dispatch) => {
-    dispatch(fetchProductByIdRequest());
-    try {
-        const response = await backend.catalogService.getProductById(id);
-        dispatch(fetchProductByIdSuccess(response.data));
-    } catch (error) {
-        dispatch(fetchProductByIdFailure(error.message));
-    }
-};
-
-export const fetchProductsByCategory = (categoryName) => async (dispatch) => {
-    dispatch(fetchProductsRequest());
-    try {
-        const response = await backend.catalogService.getProductsByCategory(categoryName);
-        dispatch(fetchProductsSuccess(response.data));
-    } catch (error) {
-        dispatch(fetchProductsFailure(error.message));
-    }
-};
-
-
-// Thunk for updating cart item quantity
-
-export const updateCartItemQuantity = (userId, shoppingCartId, productId, quantity) => async (dispatch) => {
-    dispatch(updateCartItemRequest());
-    try {
-        const params = { productId, quantity };
-        const response = await backend.shoppingService.updateCartItemQuantity(userId, shoppingCartId, params);
-        dispatch(updateCartItemSuccess(response.data));
-    } catch (error) {
-        dispatch(updateCartItemFailure(error.message));
-    }
-};
-
-// Thunk for removing item from cart
-export const removeFromCart = (userId, shoppingCartId, productId) => async (dispatch) => {
-    dispatch(removeFromCartRequest(productId));
-    try {
-        const response = await backend.shoppingService.removeCartItem(userId, shoppingCartId, productId);
-        dispatch(removeFromCartSuccess(productId));
-    } catch (error) {
-        dispatch(removeFromCartFailure(error.message));
-    }
-};
-
-// Thunk for buying items in cart
-export const buy = (userId, shoppingCartId, postalAddress, postalCode) => async (dispatch) => {
-    dispatch(buyRequest());
-    try {
-        const params = { postalAddress, postalCode };
-        const response = await backend.shoppingService.buy(userId, shoppingCartId, params);
-        dispatch(buySuccess(response.data));
-    } catch (error) {
-        dispatch(buyFailure(error.message));
-    }
-};
-
-export const fetchNewlyAddedProducts = () => async (dispatch) => {
-    dispatch(fetchNewlyAddedProductsRequest());
-    try {
-        const response = await backend.catalogService.getNewlyAddedProducts();
-        dispatch(fetchNewlyAddedProductsSuccess(response.data));
-    } catch (error) {
-        dispatch(fetchNewlyAddedProductsFailure(error.message));
-    }
-};
-
-export const addToCart = (userId, shoppingCartId, productId, quantity) => async (dispatch) => {
-    dispatch(addToCartRequest());
-    try {
-        const params = { productId, quantity };
-        const response = await backend.shoppingService.addToCart(userId, shoppingCartId, params);
+        const response = await backend.shoppingService.addToCart(productId, quantity);
         dispatch(addToCartSuccess(response.data));
+        Swal.fire('Producto añadido al carrito', '', 'success');
     } catch (error) {
-        dispatch(addToCartFailure(error.message));
+        Swal.fire('Error al añadir al carrito', '', 'error');
     }
 };
 
-export const loginUser = (credentials) => async (dispatch) => {
-    dispatch(loginRequest());
+export const removeFromCart = ( productId) => async (dispatch) => {
     try {
-        const response = await backend.authService.login(credentials.username, credentials.password);
-        dispatch(loginSuccess(response.data));
+        await backend.shoppingService.removeFromCart(productId);
+        dispatch(removeFromCartSuccess(productId));
+        Swal.fire('Producto eliminado del carrito', '', 'success');
     } catch (error) {
-        dispatch(loginFailure(error.message));
+        Swal.fire('Error al eliminar del carrito', '', 'error');
     }
-};
+}

@@ -11,6 +11,7 @@ import PendientesCategory from '../../catalog/components/PendientesCategory';
 import AnillosCategory from '../../catalog/components/AnillosCategory';
 import Header from './Header';
 import TopBanner from './TopBanner';
+
 import Login from '../../users/components/Login';
 import SignUp from '../../users/components/SignUp';
 import ForgotPassword from '../../users/components/ForgotPassword';

@@ -1,22 +1,50 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../authActions';
+import { login } from '../authActions'; // Adjust the path as needed
 import { Form, Button, Alert, Container, Card } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+
 
 const Login = () => {
     const dispatch = useDispatch();
-    const { error, loading } = useSelector(state => state.auth);
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [termsAccepted, setTermsAccepted] = useState(false);
+    const { error, loading } = useSelector((state) => state.auth);
+
+    const [formData, setFormData] = useState({
+        username: '',
+        password: ''
+    });
+
+    const [errors, setErrors] = useState({});
     const [submitted, setSubmitted] = useState(false);
+
+    const validateForm = () => {
+        const errors = {};
+
+        if (!formData.username) {
+            errors.username = 'Username is required';
+        }
+
+        if (!formData.password) {
+            errors.password = 'Password is required';
+        }
+
+        setErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setSubmitted(true);
-        if (termsAccepted) {
-            dispatch(login(username, password));
+
+        if (validateForm()) {
+            dispatch(login(formData.username, formData.password));
         }
     };
 
@@ -24,59 +52,40 @@ const Login = () => {
         <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
             <Card className="w-100" style={{ maxWidth: '400px' }}>
                 <Card.Body>
-                    <h2 className="text-center">Login</h2>
-                    {submitted && error && error.field === 'general' && <Alert variant="danger">{error.message}</Alert>}
+                    <h2 className="text-center mb-4">Login</h2>
+                    {submitted && error && <Alert variant="danger">{error}</Alert>}
                     <Form onSubmit={handleSubmit}>
-                        <Form.Group controlId="formBasicUsername" className="mt-3">
+                        <Form.Group controlId="formBasicUsername" className="mb-3 hovertext" data-hover="Enter your username">
                             <Form.Label>Username</Form.Label>
                             <Form.Control
+                            className="w-100"
                                 type="text"
                                 placeholder="Enter username"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                isInvalid={submitted && error && error.field === 'username'}
+                                name="username"
+                                value={formData.username}
+                                onChange={handleChange}
+                                isInvalid={!!errors.username}
                                 required
                             />
-                            <Form.Control.Feedback type="invalid">
-                                {submitted && error && error.field === 'username' && error.message}
-                            </Form.Control.Feedback>
+                            {errors.username && <Form.Control.Feedback type="invalid">{errors.username}</Form.Control.Feedback>}
                         </Form.Group>
-                        <Form.Group controlId="formBasicPassword" className="mb-3">
+                        <Form.Group controlId="formBasicPassword" className="mb-3 hovertext" data-hover="Enter your password">
                             <Form.Label>Password</Form.Label>
                             <Form.Control
+                            className="w-100"
                                 type="password"
                                 placeholder="Enter password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                isInvalid={submitted && error && error.field === 'password'}
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                isInvalid={!!errors.password}
                                 required
                             />
-                            <Form.Control.Feedback type="invalid">
-                                {submitted && error && error.field === 'password' && error.message}
-                            </Form.Control.Feedback>
+                            {errors.password && <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>}
                         </Form.Group>
-                        <Form.Group controlId="formBasicCheckbox" className="mb-3">
-                            <Form.Check
-                                type="checkbox"
-                                label="Acepto los términos y condiciones"
-                                checked={termsAccepted}
-                                onChange={(e) => setTermsAccepted(e.target.checked)}
-                                isInvalid={submitted && !termsAccepted}
-                                required
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                You must agree before submitting.
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                        <Button variant="primary" type="submit" disabled={loading} className="w-100">
+                        <Button  type="submit" disabled={loading} className="w-100 botonn">
                             {loading ? 'Logging in...' : 'Login'}
                         </Button>
-                        <div className="text-center mt-3">
-                            <Link to="/forgot-password">Forgot Password?</Link>
-                        </div>
-                        <div className="text-center mt-3">
-                            Not a user yet? <Link to="/signup">Sign up here</Link>
-                        </div>
                     </Form>
                 </Card.Body>
             </Card>
