@@ -1,151 +1,99 @@
 package cris.noroc.model.services;
 
-import java.time.LocalDateTime;
+import cris.noroc.model.entities.Product;
+import cris.noroc.model.entities.ShoppingCart;
+import cris.noroc.model.entities.ShoppingCartItem;
+import cris.noroc.model.entities.User;
+import cris.noroc.model.repositories.ProductRepository;
+import cris.noroc.model.repositories.ShoppingCartRepository;
+import cris.noroc.model.repositories.UserRepository;
+import cris.noroc.rest.dtos.AddToShoppingCartParamsDto;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import cris.noroc.model.entities.*;
-import cris.noroc.model.exceptions.*;
-import cris.noroc.model.repositories.*;
-import cris.noroc.rest.dtos.AddToShoppingCartParamsDto;
-
 @Service
-@Transactional
 public class ShoppingService {
 
-    private static final int MAX_QUANTITY = 100;  // Example maximum quantity
+    private final ShoppingCartRepository shoppingCartRepository;
+    private final ProductRepository productRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private ProductRepository productRepository;
+    public ShoppingService(ShoppingCartRepository shoppingCartRepository, ProductRepository productRepository, UserRepository userRepository) {
+        this.shoppingCartRepository = shoppingCartRepository;
+        this.productRepository = productRepository;
+        this.userRepository = userRepository;
+    }
 
-    @Autowired
-    private ShoppingCartItemRepository shoppingCartItemRepository;
+    public ShoppingCart createShoppingCart(User user) {
+        ShoppingCart shoppingCart = new ShoppingCart(user);
+        return shoppingCartRepository.save(shoppingCart);
+    }
 
-    @Autowired
-    private OrderItemRepository orderItemRepository;
+    public ShoppingCart addItemToCart(Long userId, Long productId, int quantity) {
+        Optional<User> user = userRepository.findById(userId);
+        Optional<Product> product = productRepository.findById(productId);
 
-    @Autowired
-    private OrderRepository orderRepository;
-
-    @Autowired
-    private ShoppingCartRepository shoppingCartRepository;
-
-    public ShoppingCart addToShoppingCart(Long userId, Long shoppingCartId, AddToShoppingCartParamsDto params)
-            throws InstanceNotFoundException, MaxQuantityExceededException {
-
-        Optional<Product> product = productRepository.findById(params.getProductId());
-
-        if (!product.isPresent()) {
-            throw new InstanceNotFoundException("project.entities.product", params.getProductId());
+        if (user.isPresent() && product.isPresent()) {
+            ShoppingCart shoppingCart = shoppingCartRepository.findByUser(user.get()).orElse(new ShoppingCart(user.get()));
+            ShoppingCartItem item = shoppingCart.getItem(productId).orElse(new ShoppingCartItem(product.get(), shoppingCart, 0));
+            item.incrementQuantity(quantity);
+            shoppingCart.addItem(item);
+            return shoppingCartRepository.save(shoppingCart);
         }
 
-        ShoppingCart shoppingCart = getShoppingCartById(shoppingCartId);
+        throw new IllegalArgumentException("User or Product not found");
+    }
 
-        Optional<ShoppingCartItem> existingCartItem = shoppingCart.getItem(params.getProductId());
+    public ShoppingCart addToShoppingCart(Long userId, Long productId, AddToShoppingCartParamsDto params) {
+        return addItemToCart(userId, productId, params.getQuantity());
+    }
 
-        if (existingCartItem.isPresent()) {
-            int newQuantity = existingCartItem.get().getQuantity() + params.getQuantity();
-            if (newQuantity > MAX_QUANTITY) {
-                throw new MaxQuantityExceededException(MAX_QUANTITY - existingCartItem.get().getQuantity());
-            }
-            existingCartItem.get().incrementQuantity(params.getQuantity());
+    public ShoppingCart removeItemFromCart(Long userId, Long productId) {
+        Optional<User> user = userRepository.findById(userId);
+
+        if (user.isPresent()) {
+            ShoppingCart shoppingCart = shoppingCartRepository.findByUser(user.get()).orElseThrow(() -> new IllegalArgumentException("ShoppingCart not found"));
+            ShoppingCartItem item = shoppingCart.getItem(productId).orElseThrow(() -> new IllegalArgumentException("Product not found in cart"));
+            shoppingCart.removeItem(item);
+            return shoppingCartRepository.save(shoppingCart);
+        }
+
+        throw new IllegalArgumentException("User not found");
+    }
+
+    public BigDecimal getTotalPrice(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+
+        if (user.isPresent()) {
+            ShoppingCart shoppingCart = shoppingCartRepository.findByUser(user.get()).orElseThrow(() -> new IllegalArgumentException("ShoppingCart not found"));
+            return shoppingCart.getTotalPrice();
+        }
+
+        throw new IllegalArgumentException("User not found");
+    }
+
+    public boolean cartExistsForUser(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        return user.isPresent() && shoppingCartRepository.existsByUser(user.get());
+    }
+
+    public void deleteCartForUser(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            shoppingCartRepository.deleteByUser(user.get());
         } else {
-            if (params.getQuantity() > MAX_QUANTITY) {
-                throw new MaxQuantityExceededException(MAX_QUANTITY);
-            }
-            ShoppingCartItem newCartItem = new ShoppingCartItem(product.get(), shoppingCart, params.getQuantity());
-            shoppingCart.addItem(newCartItem);
-            shoppingCartItemRepository.save(newCartItem);
+            throw new IllegalArgumentException("User not found");
         }
-
-        return shoppingCart;
     }
 
-    public ShoppingCart updateShoppingCartItemQuantity(Long userId, Long shoppingCartId, Long productId, int quantity)
-            throws InstanceNotFoundException, MaxQuantityExceededException {
-        
-        ShoppingCart shoppingCart = getShoppingCartById(shoppingCartId);
-        Optional<ShoppingCartItem> existingCartItem = shoppingCart.getItem(productId);
-
-        if (!existingCartItem.isPresent()) {
-            throw new InstanceNotFoundException("project.entities.product", productId);
+    public ShoppingCart getCartForUser(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            return shoppingCartRepository.findByUser(user.get()).orElseThrow(() -> new IllegalArgumentException("ShoppingCart not found"));
+        } else {
+            throw new IllegalArgumentException("User not found");
         }
-
-        if (quantity > MAX_QUANTITY) {
-            throw new MaxQuantityExceededException(MAX_QUANTITY);
-        }
-
-        existingCartItem.get().setQuantity(quantity);
-
-        return shoppingCart;
-    }
-
-    public ShoppingCart removeShoppingCartItem(Long userId, Long shoppingCartId, Long productId)
-            throws InstanceNotFoundException {
-        
-        ShoppingCart shoppingCart = getShoppingCartById(shoppingCartId);
-        Optional<ShoppingCartItem> existingCartItem = shoppingCart.getItem(productId);
-
-        if (!existingCartItem.isPresent()) {
-            throw new InstanceNotFoundException("project.entities.product", productId);
-        }
-
-        shoppingCart.removeItem(existingCartItem.get());
-        shoppingCartItemRepository.delete(existingCartItem.get());
-
-        return shoppingCart;
-    }
-
-    public Order buy(Long userId, Long shoppingCartId, String postalAddress, String postalCode)
-            throws InstanceNotFoundException, EmptyShoppingCartException {
-
-        ShoppingCart shoppingCart = getShoppingCartById(shoppingCartId);
-
-        if (shoppingCart.isEmpty()) {
-            throw new EmptyShoppingCartException();
-        }
-
-        Order order = new Order(shoppingCart.getUser(), LocalDateTime.now(), postalAddress, postalCode);
-
-        orderRepository.save(order);
-
-        for (ShoppingCartItem shoppingCartItem : shoppingCart.getItems()) {
-            OrderItem orderItem = new OrderItem(shoppingCartItem.getProduct(),
-                    shoppingCartItem.getProduct().getPrice(), shoppingCartItem.getQuantity());
-
-            order.addItem(orderItem);
-            orderItemRepository.save(orderItem);
-            shoppingCartItemRepository.delete(shoppingCartItem);
-        }
-
-        shoppingCart.removeAll();
-
-        return order;
-    }
-
-    @Transactional(readOnly = true)
-    public Order findOrder(Long userId, Long orderId) throws InstanceNotFoundException {
-        return checkOrderExistsAndBelongsTo(orderId, userId);
-    }
-
-    @Transactional(readOnly = true)
-    public Block<Order> findOrders(Long userId, int page, int size) {
-        Slice<Order> slice = orderRepository.findByUserIdOrderByDateDesc(userId, PageRequest.of(page, size));
-        return new Block<>(slice.getContent(), slice.hasNext());
-    }
-
-    private ShoppingCart getShoppingCartById(Long shoppingCartId) throws InstanceNotFoundException {
-        return shoppingCartRepository.findById(shoppingCartId)
-                .orElseThrow(() -> new InstanceNotFoundException("project.entities.shoppingCart", shoppingCartId));
-    }
-
-    private Order checkOrderExistsAndBelongsTo(Long orderId, Long userId) throws InstanceNotFoundException {
-        return orderRepository.findByIdAndUserId(orderId, userId)
-                .orElseThrow(() -> new InstanceNotFoundException("project.entities.order", orderId));
     }
 }

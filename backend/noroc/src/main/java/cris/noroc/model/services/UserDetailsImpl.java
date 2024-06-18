@@ -3,7 +3,9 @@ package cris.noroc.model.services;
 import cris.noroc.model.entities.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.Collection;
+import java.util.Collections;
 
 public class UserDetailsImpl implements UserDetails {
 
@@ -13,10 +15,13 @@ public class UserDetailsImpl implements UserDetails {
         this.user = user;
     }
 
+    public static UserDetails newUserDetails(User user) {
+        return new UserDetailsImpl(user);
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Return the authorities of the user. Implement this method based on your requirements.
-        return null; // Placeholder
+        return Collections.emptyList(); // Customize as needed
     }
 
     @Override
@@ -26,7 +31,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getUserName();
+        return user.getUsername();
     }
 
     @Override

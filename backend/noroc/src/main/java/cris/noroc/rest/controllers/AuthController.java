@@ -1,43 +1,46 @@
 package cris.noroc.rest.controllers;
 
-import cris.noroc.rest.common.JwtGenerator;
+import cris.noroc.model.entities.User;
+import cris.noroc.model.services.UserDetailsServiceImpl;
+import cris.noroc.rest.dtos.SignupRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private UserDetailsServiceImpl userDetailsService;
 
     @Autowired
-    private JwtGenerator jwtGenerator;
+    private PasswordEncoder passwordEncoder;
 
-    @PostMapping("/login")
-    public Map<String, String> login(@RequestBody Map<String, String> loginRequest) {
-        String username = loginRequest.get("username");
-        String password = loginRequest.get("password");
+    @PostMapping("/signup")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequestDto signupRequest) {
+        if (userDetailsService.findByUsername(signupRequest.getUsername()) != null) {
+            return ResponseEntity.badRequest().body("Error: Username is already taken!");
+        }
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password)
-        );
+        if (userDetailsService.findByEmail(signupRequest.getEmail()) != null) {
+            return ResponseEntity.badRequest().body("Error: Email is already in use!");
+        }
 
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String role = userDetails.getAuthorities().iterator().next().getAuthority();
+        // Creating user's account
+        User user = new User();
+        user.setUsername(signupRequest.getUsername());
+        user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
+        user.setFirstName(signupRequest.getFirstName());
+        user.setLastName(signupRequest.getLastName());
+        user.setEmail(signupRequest.getEmail());
+        user.setRole(User.RoleType.USER);
 
-        String token = jwtGenerator.generateToken(username, role);
+        userDetailsService.createUser(user);
 
-        Map<String, String> response = new HashMap<>();
-        response.put("token", token);
-
-        return response;
+        return ResponseEntity.ok("User registered successfully!");
     }
 }

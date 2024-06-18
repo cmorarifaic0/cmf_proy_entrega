@@ -17,7 +17,7 @@ public class OrderTest {
 
     private Product createProduct(String name, BigDecimal price) {
         Category category = new Category("Test Category");
-        return new Product(name, "description", price, category, LocalDateTime.now());
+        return new Product(null, name, "description", price, null, LocalDateTime.now());
     }
 
     @Test
@@ -26,7 +26,7 @@ public class OrderTest {
         Product product1 = createProduct("product1", new BigDecimal("10.5"));
         Product product2 = createProduct("product2", new BigDecimal("15.3"));
 
-        User user = new User("testUser", "password", "firstName", "lastName", "email@example.com");
+        User user = new User("testUser", "password", "firstName", "lastName", "email@example.com", User.RoleType.USER);
 
         Order order = new Order(user, LocalDateTime.now(), "123 Test St", "12345");
 

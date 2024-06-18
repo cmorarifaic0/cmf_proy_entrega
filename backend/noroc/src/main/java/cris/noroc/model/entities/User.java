@@ -1,97 +1,42 @@
 package cris.noroc.model.entities;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.Objects;
 
 @Entity
-@Table(name = "UserTable")
-public class User implements UserDetails {
-
-    public enum RoleType { USER, ADMIN, GUEST };
+@Table(name = "users")
+public class User {
+    
+    public enum RoleType {
+        USER,
+        ADMIN,
+        GUEST
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty
-    @Size(min = 4, max = 20)
-    @Column(name = "username", unique = true, nullable = false)
-    private String userName;
+    @Column(nullable = false, unique = true)
+    private String username;
 
-    @NotEmpty
-    @Size(min = 8)
-    @Column(name = "password", nullable = false)
+    @Column(nullable = false)
     private String password;
 
-    @NotEmpty
-    @Column(name = "first_name", nullable = false)
+    @Column(nullable = false)
     private String firstName;
 
-    @NotEmpty
-    @Column(name = "last_name", nullable = false)
+    @Column(nullable = false)
     private String lastName;
 
-    @NotEmpty
-    @Email
-    @Column(name = "email", unique = true, nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
+    @Column(nullable = false)
     private RoleType role;
 
-    @OneToOne(mappedBy = "user", optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private ShoppingCart shoppingCart;
-
-    public User() {}
-
-    public User(String userName, String password, String firstName, String lastName, String email, RoleType role) {
-        this.userName = userName;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.role = role;
-    }
-
-    // Getters and Setters
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList(); // Replace with actual authorities if applicable
-    }
-
-    @Override
-    public String getUsername() {
-        return userName;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+    // getters and setters
 
     public Long getId() {
         return id;
@@ -101,12 +46,12 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -149,11 +94,18 @@ public class User implements UserDetails {
         this.role = role;
     }
 
-    public ShoppingCart getShoppingCart() {
-        return shoppingCart;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return Objects.equals(getId(), user.getId()) &&
+                Objects.equals(getUsername(), user.getUsername()) &&
+                Objects.equals(getEmail(), user.getEmail());
     }
 
-    public void setShoppingCart(ShoppingCart shoppingCart) {
-        this.shoppingCart = shoppingCart;
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getUsername(), getEmail());
     }
 }

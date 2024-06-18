@@ -1,152 +1,112 @@
 package cris.noroc.test.model.services;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
-import cris.noroc.model.exceptions.DuplicateInstanceException;
-import cris.noroc.model.exceptions.InstanceNotFoundException;
 import cris.noroc.model.entities.User;
-import cris.noroc.model.exceptions.IncorrectLoginException;
-import cris.noroc.model.exceptions.IncorrectPasswordException;
-import cris.noroc.model.services.UserDetails;
+import cris.noroc.model.services.UserDetailsService;
+import cris.noroc.model.services.UserDetailsServiceImpl;
+import cris.noroc.model.exceptions.ResourceNotFoundException;
+import cris.noroc.model.repositories.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
-@SpringBootTest
-@ActiveProfiles("test")
-@Transactional
 public class UserServiceTest {
-	
-	private final Long NON_EXISTENT_ID = Long.valueOf(-1);
-	
-	@Autowired
-	private UserDetails userService;
-	
-	private User createUser(String userName) {
-		return new User(userName, "password", "firstName", "lastName", userName + "@" + userName + ".com");
-	}
-	
-	@Test
-	public void testSignUpAndLoginFromId() throws DuplicateInstanceException, InstanceNotFoundException {
-		
-		User user = createUser("user");
-		
-		userService.signUp(user);
-		
-		User loggedInUser = userService.loginFromId(user.getId());
-		
-		assertEquals(user, loggedInUser);
-		assertEquals(User.RoleType.USER, user.getRole());
-		assertTrue(user.getShoppingCart().getItems().isEmpty());
-		
-	}
-	
-	@Test
-	public void testSignUpDuplicatedUserName() throws DuplicateInstanceException {
-		
-		User user = createUser("user");
-		
-		userService.signUp(user);
-		assertThrows(DuplicateInstanceException.class, () -> userService.signUp(user));
-		
-	}
-	
-	@Test
-	public void testLoginFromNonExistentId() {
-		assertThrows(InstanceNotFoundException.class, () -> userService.loginFromId(NON_EXISTENT_ID));
-	}
-	
-	@Test
-	public void testLogin() throws DuplicateInstanceException, IncorrectLoginException {
-		
-		User user = createUser("user");
-		String clearPassword = user.getPassword();
-				
-		userService.signUp(user);
-		
-		User loggedInUser = userService.login(user.getUserName(), clearPassword);
-		
-		assertEquals(user, loggedInUser);
-		
-	}
-	
-	@Test
-	public void testLoginWithIncorrectPassword() throws DuplicateInstanceException {
-		
-		User user = createUser("user");
-		String clearPassword = user.getPassword();
-		
-		userService.signUp(user);
-		assertThrows(IncorrectLoginException.class, () ->
-			userService.login(user.getUserName(), 'X' + clearPassword));
-		
-	}
-	
-	@Test
-	public void testLoginWithNonExistentUserName() {
-		assertThrows(IncorrectLoginException.class, () -> userService.login("X", "Y"));
-	}
-	
-	@Test
-	public void testUpdateProfile() throws InstanceNotFoundException, DuplicateInstanceException {
-		
-		User user = createUser("user");
-		
-		userService.signUp(user);
-		
-		user.setFirstName('X' + user.getFirstName());
-		user.setLastName('X' + user.getLastName());
-		user.setEmail('X' + user.getEmail());
-		
-		userService.updateProfile(user.getId(), 'X' + user.getFirstName(), 'X' + user.getLastName(),
-			'X' + user.getEmail());
-		
-		User updatedUser = userService.loginFromId(user.getId());
-		
-		assertEquals(user, updatedUser);
-		
-	}
-	
-	@Test
-	public void testUpdateProfileWithNonExistentId() {
-		assertThrows(InstanceNotFoundException.class, () ->
-			userService.updateProfile(NON_EXISTENT_ID, "X", "X", "X"));
-	}
-	
-	@Test
-	public void testChangePassword() throws DuplicateInstanceException, InstanceNotFoundException,
-		IncorrectPasswordException, IncorrectLoginException {
-		
-		User user = createUser("user");
-		String oldPassword = user.getPassword();
-		String newPassword = 'X' + oldPassword;
-		
-		userService.signUp(user);
-		userService.changePassword(user.getId(), oldPassword, newPassword);
-		userService.login(user.getUserName(), newPassword);
-		
-	}
-	
-	@Test
-	public void testChangePasswordWithNonExistentId() {
-		assertThrows(InstanceNotFoundException.class, () ->
-			userService.changePassword(NON_EXISTENT_ID, "X", "Y"));
-	}
-	
-	@Test
-	public void testChangePasswordWithIncorrectPassword() throws DuplicateInstanceException {
-		
-		User user = createUser("user");
-		String oldPassword = user.getPassword();
-		String newPassword = 'X' + oldPassword;
-		
-		userService.signUp(user);
-		assertThrows(IncorrectPasswordException.class, () ->
-			userService.changePassword(user.getId(), 'Y' + oldPassword, newPassword));
-		
-	}
 
+    @Mock
+    private UserRepository userRepository;
+
+    @Mock
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @InjectMocks
+    private UserDetailsServiceImpl userService;
+
+    private User user;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+
+        user = new User("testUser", "password", "firstName", "lastName", "email@example.com", User.RoleType.USER);
+        user.setId(1L);
+    }
+
+    @Test
+    public void testCreateUser() {
+        when(passwordEncoder.encode(any(String.class))).thenReturn("encodedPassword");
+        when(userRepository.save(any(User.class))).thenReturn(user);
+
+        User createdUser = userService.createUser(user);
+
+        assertNotNull(createdUser);
+        assertEquals("encodedPassword", createdUser.getPassword());
+        verify(userRepository, times(1)).save(any(User.class));
+    }
+
+    @Test
+    public void testUpdateUser() {
+        User updatedUser = new User("updatedUser", "newPassword", "newFirstName", "newLastName", "newEmail@example.com", User.RoleType.ADMIN);
+        updatedUser.setId(1L);
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(passwordEncoder.encode(any(String.class))).thenReturn("encodedPassword");
+        when(userRepository.save(any(User.class))).thenReturn(updatedUser);
+
+        User result = userService.updateUser(1L, updatedUser);
+
+        assertNotNull(result);
+        assertEquals("encodedPassword", result.getPassword());
+        assertEquals("updatedUser", result.getUserName());
+        assertEquals("newFirstName", result.getFirstName());
+        assertEquals("newLastName", result.getLastName());
+        assertEquals("newEmail@example.com", result.getEmail());
+        assertEquals(User.RoleType.ADMIN, result.getRole());
+        verify(userRepository, times(1)).findById(1L);
+        verify(userRepository, times(1)).save(any(User.class));
+    }
+
+    @Test
+    public void testUpdateUserNotFound() {
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+
+        User updatedUser = new User("updatedUser", "newPassword", "newFirstName", "newLastName", "newEmail@example.com", User.RoleType.ADMIN);
+
+        assertThrows(ResourceNotFoundException.class, () -> {
+            userService.updateUser(1L, updatedUser);
+        });
+
+        verify(userRepository, times(1)).findById(1L);
+        verify(userRepository, times(0)).save(any(User.class));
+    }
+
+    @Test
+    public void testFindByUsername() {
+        when(userRepository.findByUserName("testUser")).thenReturn(Optional.of(user));
+
+        User foundUser = userService.findByUsername("testUser");
+
+        assertNotNull(foundUser);
+        assertEquals("testUser", foundUser.getUserName());
+        verify(userRepository, times(1)).findByUserName("testUser");
+    }
+
+    @Test
+    public void testFindByUsernameNotFound() {
+        when(userRepository.findByUserName("testUser")).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> {
+            userService.findByUsername("testUser");
+        });
+
+        verify(userRepository, times(1)).findByUserName("testUser");
+    }
 }

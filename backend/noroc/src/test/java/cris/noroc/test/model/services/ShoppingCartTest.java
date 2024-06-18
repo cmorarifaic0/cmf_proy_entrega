@@ -1,4 +1,4 @@
-package cris.noroc.test.model.entities;
+package cris.noroc.test.model.services;
 
 import static org.junit.jupiter.api.Assertions.*;
 
